@@ -1,0 +1,65 @@
+/* Estilos personalizados para el contenedor de la alerta */
+.my-swal-popup {
+    background-color: #f8d7da; /* Color de fondo para alertas de error (rojo claro) */
+    border-color: #f5c6cb; /* Color del borde para alertas de error (rojo más claro) */
+}
+
+/* Estilos personalizados para el título de la alerta */
+.my-swal-title {
+    color: #721c24; /* Color del título (rojo oscuro) */
+}
+
+/* Estilos personalizados para el contenido de la alerta */
+.my-swal-content {
+    color: #721c24; /* Color del contenido (rojo oscuro) */
+}
+
+/* Estilos personalizados para el botón de aceptar */
+.my-swal-button {
+    background-color: #dc3545; /* Color de fondo del botón (rojo) */
+    border-color: #dc3545; /* Color del borde del botón (rojo) */
+    color: #fff; /* Color del texto del botón (blanco) */
+}
+
+/* Estilos personalizados para el botón de aceptar al pasar el ratón */
+.my-swal-button:hover {
+    background-color: #c82333; /* Cambia el color de fondo al pasar el ratón (rojo más oscuro) */
+    border-color: #bd2130; /* Cambia el color del borde al pasar el ratón (rojo más oscuro) */
+}
+
+/* Estilos personalizados para el título de la alerta */
+.my-swal-title {
+    color: #4caf50; /* Color del título (verde) */
+}
+
+/* Estilos personalizados para el botón de confirmación */
+.my-custom-confirm-button {
+    background-color: #4caf50; /* Color de fondo del botón (verde) */
+    border-color: #4caf50; /* Color del borde del botón (verde) */
+    color: #fff; /* Color del texto del botón (blanco) */
+}
+
+/* ajuste del  de estilos  */
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.loading-content {
+    text-align: center;
+}
+
+.custom-grid-loader {
+    color: #c15e56; /* Cambia el color aquí */
+    width: 20px; /* Ajusta el ancho aquí */
+    height: 20px; /* Ajusta la altura aquí */
+}
