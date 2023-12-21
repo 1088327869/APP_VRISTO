@@ -94,15 +94,6 @@ const ImageForm: React.FC<ImageFormProps> = ({ onNext }) => {
             if (responseConsulta.data.error) {
                 setErrorMessages(['Documento ya existe.']);
             } else {
-                Swal.fire({
-                    title: 'Felicitaciones',
-                    text: 'Tu registro fue exitoso. Estamos validando tus información. Pronto nos pondremos en contacto contigo.',
-                    icon: 'success',
-                    confirmButtonText: 'Aceptar',
-                    confirmButtonColor: '#dc3545', // Color rojo
-                    timer: 8000,
-                });
-
                 const formData = new FormData();
                 formData.append('fotoRostro', file1!);
                 formData.append('documento_delantero', file2!);
@@ -115,6 +106,16 @@ const ImageForm: React.FC<ImageFormProps> = ({ onNext }) => {
                 await axios.post(`${apiURL}/api/EstudioRegistro`, { documento: userDocumento });
 
                 // Marcamos el final del área de loading
+
+                Swal.fire({
+                    title: 'Felicitaciones',
+                    text: 'Tu registro fue exitoso. Estamos validando tus información. Pronto nos pondremos en contacto contigo.',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#dc3545', // Color rojo
+                    timer: 8000,
+                });
+
                 setLoading(false);
 
                 navigate('/');
@@ -123,15 +124,6 @@ const ImageForm: React.FC<ImageFormProps> = ({ onNext }) => {
             console.error('Error:', error);
 
             await axios.post(`${apiURL}/api/EstudioRegistro`, { documento: userDocumento });
-
-            Swal.fire({
-                title: 'Felicitaciones',
-                text: 'Tu registro fue exitoso. Estamos validando tus información. Pronto nos pondremos en contacto contigo.',
-                icon: 'success',
-                confirmButtonText: 'Aceptar',
-                confirmButtonColor: '#dc3545', // Color rojo
-                timer: 8000,
-            });
 
             if (axios.isAxiosError(error)) {
                 if (error.response) {
@@ -146,6 +138,15 @@ const ImageForm: React.FC<ImageFormProps> = ({ onNext }) => {
             }
 
             setErrorMessages(['Ocurrió un error durante el registro.']);
+
+            Swal.fire({
+                title: 'Felicitaciones',
+                text: 'Tu registro fue exitoso. Estamos validando tus información. Pronto nos pondremos en contacto contigo.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#dc3545', // Color rojo
+                timer: 8000,
+            });
 
             // Marcamos el final del área de loading
             setLoading(false);

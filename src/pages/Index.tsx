@@ -260,91 +260,92 @@ const Index = () => {
                     <span>Perfil</span>
                 </li>
             </ul>
-            <div className="pt-5">
-                <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-5 mb-5" style={{ gridTemplateRows: 'auto auto auto' }}>
-                    {/* Mi cupo */}
-                    <div className="panel h-full">
-                        <div className="flex items-center mb-5">
-                            <h5 className="font-semibold text-lg dark:text-white-light">Mi cupo</h5>
-                        </div>
-                        <div>
-                            <div className="bg-white dark:bg-black rounded-lg overflow-hidden">
-                                <ReactApexChart series={salesByCategory.series} options={salesByCategory.options} type="donut" height={460} />
+            <div className="panel h-full lg:h-auto">
+                <div className="pt-5">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-5 mb-5" style={{ gridTemplateRows: 'auto auto auto' }}>
+                        {/* Mi cupo */}
+                        <div className="panel h-full">
+                            <div className="flex items-center mb-5">
+                                <h5 className="font-semibold text-lg dark:text-white-light">Mi cupo</h5>
+                            </div>
+                            <div>
+                                <div className="bg-white dark:bg-black rounded-lg overflow-hidden">
+                                    <ReactApexChart series={salesByCategory.series} options={salesByCategory.options} type="donut" height={460} />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    {/* Perfil */}
-                    <div className="panel h-full">
-                        <div className="flex items-center justify-between mb-5">
-                            <h5 className="font-semibold text-lg dark:text-white-light">Perfil</h5>
-                            <Link to="/forms/wizards/actualizar" className="ltr:ml-auto rtl:mr-auto btn btn-primary p-2 rounded-full">
-                                <IconPencilPaper />
-                            </Link>
-                        </div>
-                        <div className="mb-5">
-                            <div className="flex flex-col justify-center items-center">
-                                <img src={formData.foto ? formData.foto : '/assets/images/clients/user.png'} alt="img" className="w-24 h-24 rounded-full object-cover mb-5" />
-                                <p className="font-semibold text-primary text-xl">{formData.nombre || ''} </p>
+                        {/* Perfil */}
+                        <div className="panel h-full">
+                            <div className="flex items-center justify-between mb-5">
+                                <h5 className="font-semibold text-lg dark:text-white-light">Perfil</h5>
+                                <Link to="/forms/wizards/actualizar" className="ltr:ml-auto rtl:mr-auto btn btn-primary p-2 rounded-full">
+                                    <IconPencilPaper />
+                                </Link>
                             </div>
-                            <ul className="mt-5 flex flex-col max-w-[160px] m-auto space-y-4 font-semibold text-white-dark">
-                                <li className="flex items-center gap-2">
-                                    <IconCoffee className="shrink-0" />
-                                    {formData.documento || ''}
-                                </li>
-                                <li className="flex items-center gap-2">
-                                    <IconCalendar className="shrink-0" />
+                            <div className="mb-5">
+                                <div className="flex flex-col justify-center items-center">
+                                    <img src={formData.foto ? formData.foto : '/assets/images/clients/user.png'} alt="img" className="w-24 h-24 rounded-full object-cover mb-5" />
+                                    <p className="font-semibold text-primary text-xl">{formData.nombre || ''} </p>
+                                </div>
+                                <ul className="mt-5 flex flex-col max-w-[160px] m-auto space-y-4 font-semibold text-white-dark">
+                                    <li className="flex items-center gap-2">
+                                        <IconCoffee className="shrink-0" />
+                                        {formData.documento || ''}
+                                    </li>
+                                    <li className="flex items-center gap-2">
+                                        <IconCalendar className="shrink-0" />
 
-                                    {/* Mostrar según el estado */}
-                                    {formData.estado === 'EN ESTUDIO' && <span className="font-semibold text-xl text-gray-500">{formData.estado}</span>}
+                                        {/* Mostrar según el estado */}
+                                        {formData.estado === 'EN ESTUDIO' && <span className="font-semibold text-xl text-gray-500">{formData.estado}</span>}
 
-                                    {formData.estado === 'APROBADO' && <span className="font-semibold text-xl text-green-500">{formData.estado}</span>}
+                                        {formData.estado === 'APROBADO' && <span className="font-semibold text-xl text-green-500">{formData.estado}</span>}
 
-                                    {formData.estado === 'RECHAZADO' && <span className="font-semibold text-xl text-red-500">{formData.estado}</span>}
-                                </li>
+                                        {formData.estado === 'RECHAZADO' && <span className="font-semibold text-xl text-red-500">{formData.estado}</span>}
+                                    </li>
 
-                                <li className="flex items-center gap-2">
-                                    <IconMapPin className="shrink-0" />
-                                    {formData.ciudad || ''}
-                                </li>
-                                <li>
-                                    <button className="flex items-center gap-2">
-                                        <IconMail className="w-5 h-5 shrink-0" />
-                                        <span className="text-primary truncate"> {formData.email || ''}</span>
-                                    </button>
-                                </li>
-                                <li className="flex items-center gap-2">
-                                    <IconPhone />
-                                    <span className="whitespace-nowrap" dir="ltr">
-                                        {formData.telefono || ''}
-                                    </span>
-                                </li>
-                            </ul>
-                            <ul className="mt-7 flex items-center justify-center gap-2">
-                                <li>
-                                    <button className="btn btn-info flex items-center justify-center rounded-full w-10 h-10 p-0">
-                                        <IconTwitter className="w-5 h-5" />
-                                    </button>
-                                </li>
-                                <li>
-                                    <button className="btn btn-danger flex items-center justify-center rounded-full w-10 h-10 p-0">
-                                        <IconDribbble />
-                                    </button>
-                                </li>
-                                <li>
-                                    <button className="btn btn-dark flex items-center justify-center rounded-full w-10 h-10 p-0">
-                                        <IconGithub />
-                                    </button>
-                                </li>
-                            </ul>
+                                    <li className="flex items-center gap-2">
+                                        <IconMapPin className="shrink-0" />
+                                        {formData.ciudad || ''}
+                                    </li>
+                                    <li>
+                                        <button className="flex items-center gap-2">
+                                            <IconMail className="w-5 h-5 shrink-0" />
+                                            <span className="text-primary truncate"> {formData.email || ''}</span>
+                                        </button>
+                                    </li>
+                                    <li className="flex items-center gap-2">
+                                        <IconPhone />
+                                        <span className="whitespace-nowrap" dir="ltr">
+                                            {formData.telefono || ''}
+                                        </span>
+                                    </li>
+                                </ul>
+                                <ul className="mt-7 flex items-center justify-center gap-2">
+                                    <li>
+                                        <button className="btn btn-info flex items-center justify-center rounded-full w-10 h-10 p-0">
+                                            <IconTwitter className="w-5 h-5" />
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button className="btn btn-danger flex items-center justify-center rounded-full w-10 h-10 p-0">
+                                            <IconDribbble />
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button className="btn btn-dark flex items-center justify-center rounded-full w-10 h-10 p-0">
+                                            <IconGithub />
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                    {/* Mis Creditos */}
-                    <div className="panel h-full lg:h-auto">
-                        <div className="mb-5">
-                            <h5 className="font-semibold text-lg dark:text-white-light">Mis Créditos</h5>
-                        </div>
-                        <div className="space-y-4">
-                            {/* <div className="border border-[#ebedf2] rounded dark:bg-[#1b2e4b] dark:border-0">
+                        {/* Mis Creditos */}
+                        <div className="panel h-full lg:h-auto">
+                            <div className="mb-5">
+                                <h5 className="font-semibold text-lg dark:text-white-light">Mis Créditos</h5>
+                            </div>
+                            <div className="space-y-4">
+                                {/* <div className="border border-[#ebedf2] rounded dark:bg-[#1b2e4b] dark:border-0">
                                 <div className="flex items-center justify-between p-4 py-2">
                                     <div className="grid place-content-center w-9 h-9 rounded-md bg-secondary-light dark:bg-secondary text-secondary dark:text-secondary-light">
                                         <IconShoppingBag />
@@ -358,7 +359,7 @@ const Index = () => {
                                     </div>
                                 </div>
                             </div> */}
-                            {/* <div className="border border-[#ebedf2] rounded dark:bg-[#1b2e4b] dark:border-0">
+                                {/* <div className="border border-[#ebedf2] rounded dark:bg-[#1b2e4b] dark:border-0">
                                 <div className="flex items-center justify-between p-4 py-2">
                                     <div className="grid place-content-center w-9 h-9 rounded-md bg-info-light dark:bg-info text-info dark:text-info-light">
                                         <IconTag />
@@ -372,26 +373,26 @@ const Index = () => {
                                     </div>
                                 </div>
                             </div> */}
-                            <div className="border border-[#ebedf2] rounded dark:bg-[#1b2e4b] dark:border-0">
-                                <div className="flex items-center justify-between p-4 py-2">
-                                    <div className="grid place-content-center w-9 h-9 rounded-md bg-warning-light dark:bg-warning text-warning dark:text-warning-light">
-                                        <IconCreditCard />
-                                    </div>
-                                    <div className="ltr:ml-4 rtl:mr-4 flex items-start justify-between flex-auto font-semibold">
-                                        <h6 className="text-white-dark text-[13px] dark:text-white-dark">
-                                            Credito express
-                                            <span className="block text-base text-[#515365] dark:text-white-light">$0</span>
-                                        </h6>
-                                        <p className="ltr:ml-auto rtl:mr-auto text-warning">100%</p>
+                                <div className="border border-[#ebedf2] rounded dark:bg-[#1b2e4b] dark:border-0">
+                                    <div className="flex items-center justify-between p-4 py-2">
+                                        <div className="grid place-content-center w-9 h-9 rounded-md bg-warning-light dark:bg-warning text-warning dark:text-warning-light">
+                                            <IconCreditCard />
+                                        </div>
+                                        <div className="ltr:ml-4 rtl:mr-4 flex items-start justify-between flex-auto font-semibold">
+                                            <h6 className="text-white-dark text-[13px] dark:text-white-dark">
+                                                Credito express
+                                                <span className="block text-base text-[#515365] dark:text-white-light">$0</span>
+                                            </h6>
+                                            <p className="ltr:ml-auto rtl:mr-auto text-warning">100%</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div className="grid xl:grid-cols-3 gap-6 mb-6">
-                    {/* <div className="panel h-full">
+                    <div className="grid xl:grid-cols-3 gap-6 mb-6">
+                        {/* <div className="panel h-full">
                         <div className="flex items-center mb-5">
                             <h5 className="font-semibold text-lg dark:text-white-light">Sales By Category</h5>
                         </div>
@@ -409,6 +410,7 @@ const Index = () => {
                             
                         </div>
                     </div> */}
+                    </div>
                 </div>
             </div>
         </div>
