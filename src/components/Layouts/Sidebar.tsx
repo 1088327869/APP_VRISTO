@@ -168,7 +168,7 @@ const Sidebar = () => {
                                         </NavLink>
                                     </li>
                                     <li className="nav-item">
-                                        <NavLink to="/apps/todolist" className="group">
+                                        <NavLink to="/apps/pay" className="group">
                                             <div className="flex items-center">
                                                 <IconMenuTodo className="group-hover:!text-primary shrink-0" />
                                                 <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Pagar')}</span>
@@ -224,14 +224,14 @@ const Sidebar = () => {
                                         </NavLink>
                                     </li>
 
-                                    <li className="nav-item">
+                                    {/* <li className="nav-item">
                                         <NavLink to="/apps/notes" className="group">
                                             <div className="flex items-center">
                                                 <IconMenuNotes className="group-hover:!text-primary shrink-0" />
                                                 <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Paz y salvo')}</span>
                                             </div>
                                         </NavLink>
-                                    </li>
+                                    </li> */}
                                     <li className="nav-item">
                                         <NavLink to="/forms/wizards/actualizar" className="group">
                                             <div className="flex items-center">
@@ -241,7 +241,7 @@ const Sidebar = () => {
                                         </NavLink>
                                     </li>
                                     <li className="nav-item">
-                                        <NavLink to="/forms/date-picker" className="group">
+                                        <NavLink to="/forms/Credit" className="group">
                                             <div className="flex items-center">
                                                 <IconMenuForms className="group-hover:!text-primary shrink-0" />
                                                 <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Solicitar Crédito')}</span>

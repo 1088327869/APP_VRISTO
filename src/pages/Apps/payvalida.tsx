@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import useToken from '../../pages/Authentication/login/token';
+import useToken from '../Authentication/login/token';
 import { faCreditCard } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import GridLoader from 'react-spinners/GridLoader';
@@ -165,7 +165,8 @@ const FormularioG = () => {
 
             // Abre una nueva pestaña del navegador con la URL completa
 
-            window.open(urlCompleta, '_blank');
+            // window.open(urlCompleta, '_blank');
+            window.location.href = urlCompleta;
             // Marcamos el final del área de loading
             setLoading(false);
         } catch (error) {
@@ -196,7 +197,7 @@ const FormularioG = () => {
                     </div>
                 )}
                 <div>
-                    <ul className="flex space-x-2 rtl:space-x-reverse">
+                    {/* <ul className="flex space-x-2 rtl:space-x-reverse">
                         <li>
                             <Link to="#" className="text-primary hover:underline">
                                 Pago
@@ -205,7 +206,7 @@ const FormularioG = () => {
                         <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
                             <span>Crédito</span>
                         </li>
-                    </ul>
+                    </ul> */}
                     <div className="panel h-full lg:h-auto">
                         <div className="pt-5">
                             <h6 className=" mt-0 mb-0 text-lg">
@@ -223,7 +224,23 @@ const FormularioG = () => {
                                         <form className="space-y-5">
                                             {/* ... (resto del código) */}
                                             <div className="flex sm:flex-row flex-col">
+                                                <label className="sm:w-1/4 sm:ltr:mr-2 rtl:ml-2">Seleccione crédito</label>
+
+                                                <div className="flex-1">
+                                                    {/* ... (resto del código) */}
+                                                    <div className="mb-2">
+                                                        <select id="horizontalEmail" className="form-input flex-1">
+                                                            <option value="">Seleccione un crédito</option>
+                                                            <option value="Crédito**2525">Crédito **2525</option>
+                                                            <option value="Crédito**85968">Crédito **85968</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex sm:flex-row flex-col">
                                                 <label className="sm:w-1/4 sm:ltr:mr-2 rtl:ml-2">Tipo de pago</label>
+
                                                 <div className="flex-1">
                                                     {/* ... (resto del código) */}
                                                     <div className="mb-2">
@@ -278,11 +295,12 @@ const FormularioG = () => {
                                         <form className="space-y-5">
                                             <div className="flex sm:flex-row flex-col">
                                                 <label htmlFor="horizontalEmail" className="mb-0 sm:w-1/4 sm:ltr:mr-2 rtl:ml-2">
-                                                    Crédito
+                                                    Tipo
                                                 </label>
                                                 <select id="horizontalEmail" className="form-input flex-1" value={selectedPhysicalPayment} onChange={handlePaymentChange}>
                                                     <option value="pse">PSE</option>
-                                                    <option value="bancolombia">BANCOLOMBIA</option>
+                                                    <option value="nequi">Nequi</option>
+                                                    <option value="bancolombia">Bancolombia</option>
                                                     <option value="puntored">puntored</option>
                                                     <option value="sured">Su Red</option>
                                                     <option value="gana">Gana</option>
@@ -296,6 +314,12 @@ const FormularioG = () => {
                                             {selectedPhysicalPayment === 'pse' || selectedPhysicalPayment === '' ? (
                                                 <div className="payment-image-container">
                                                     <img src="../../assets/images/clients/pse.png" alt="PSE" className="payment-image img-fluid" />
+                                                </div>
+                                            ) : null}
+
+                                            {selectedPhysicalPayment === 'nequi' ? (
+                                                <div className="payment-image-container">
+                                                    <img src="../../assets/images/clients/nequi.jpg" alt="nequi" className="payment-image img-fluid" />
                                                 </div>
                                             ) : null}
 

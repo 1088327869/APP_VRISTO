@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+
 const Index = lazy(() => import('../pages/Index'));
 const Formulario = lazy(() => import('../pages/Formulariot'));
 const Finalizar = lazy(() => import('../pages/Forms/RegistroCliente/registroFinalizado'));
@@ -6,7 +7,9 @@ const Finalizar = lazy(() => import('../pages/Forms/RegistroCliente/registroFina
 const Analytics = lazy(() => import('../pages/Analytics'));
 const Finance = lazy(() => import('../pages/Finance'));
 const Crypto = lazy(() => import('../pages/Crypto'));
-const Todolist = lazy(() => import('../pages/Apps/Todolist'));
+
+const Payvalida = lazy(() => import('../pages/Apps/payvalida'));
+
 const Mailbox = lazy(() => import('../pages/Apps/Mailbox'));
 const Notes = lazy(() => import('../pages/Apps/Notes'));
 const Contacts = lazy(() => import('../pages/Apps/Contacts'));
@@ -102,7 +105,10 @@ const FormularioActualizar = lazy(() => import('../pages/Forms/RegistroActualiza
 // const FileUploadPreview = lazy(() => import('../pages/Forms/FileUploadPreview'));
 const QuillEditor = lazy(() => import('../pages/Forms/QuillEditor'));
 const MarkDownEditor = lazy(() => import('../pages/Forms/MarkDownEditor'));
-const DateRangePicker = lazy(() => import('../pages/Forms/DateRangePicker'));
+
+const SolicitarCredito = lazy(() => import('../pages/Forms/solicitarCredito'));
+const ConfirmarDesembolso = lazy(() => import('../pages/Forms/ConfirmarDesembolso'));
+
 const Clipboard = lazy(() => import('../pages/Forms/Clipboard'));
 
 // servidor backend
@@ -143,8 +149,8 @@ const routes = [
         element: <Crypto />,
     },
     {
-        path: '/apps/todolist',
-        element: <Todolist />,
+        path: '/apps/pay',
+        element: <Payvalida />,
     },
     {
         path: '/apps/notes',
@@ -554,9 +560,14 @@ const routes = [
         element: <MarkDownEditor />,
     },
     {
-        path: '/forms/date-picker',
-        element: <DateRangePicker />,
+        path: '/forms/Credit',
+        element: <SolicitarCredito />,
     },
+    {
+        path: '/forms/Credit/Confirmar',
+        element: <ConfirmarDesembolso />,
+    },
+
     {
         path: '/forms/clipboard',
         element: <Clipboard />,

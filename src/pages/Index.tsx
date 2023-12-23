@@ -43,7 +43,8 @@ const Index = () => {
         const storedUsdDate = localStorage.getItem('userData');
         const userDocumento = storedUsdDate ? JSON.parse(storedUsdDate) : {};
 
-        // console.log('Documento', userDocumento);
+        // eliminar datos de localsotreg
+        localStorage.removeItem('DetalleCredit');
 
         const apiURL = getApiUrl();
 
@@ -84,12 +85,15 @@ const Index = () => {
                 const ciudad_registro = response.data.ciudad;
                 const estudio_registro = response2.data.estado;
                 const Cupo_registrado = response3.data.cupo;
+                const CupoDisponible_registrado = response3.data.cupoDisponible;
+
+                // console.log('cupo', response3.data.cupoDisponible);
 
                 // foto guardada
                 const foto_registro = `${apiURL}/uploads/registro/${fotoPerfilData.documento_guardar}`;
 
-                console.log('foto: ', fotoPerfilData);
-                console.log('completa: ', foto_registro);
+                // console.log('foto: ', fotoPerfilData);
+                // console.log('completa: ', foto_registro);
 
                 // // Actualiza el estado formData con los datos de la API
                 setFormData((prevData) => {
@@ -105,7 +109,7 @@ const Index = () => {
                         estado: estudio_registro,
                         TotalCupo: Cupo_registrado,
                         // Pendiente por cambiar el cupo disponible
-                        TotalDisponible: Cupo_registrado,
+                        TotalDisponible: CupoDisponible_registrado,
 
                         // fotos
                         foto: foto_registro,

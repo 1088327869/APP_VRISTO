@@ -589,7 +589,7 @@ const Header = () => {
                                 <NavLink to="/apps/mailbox">{t('mailbox')}</NavLink>
                             </li>
                             <li>
-                                <NavLink to="/apps/todolist">{t('todo_list')}</NavLink>
+                                <NavLink to="/apps/pay">{t('todo_list')}</NavLink>
                             </li>
                             <li>
                                 <NavLink to="/apps/notes">{t('notes')}</NavLink>
@@ -859,7 +859,7 @@ const Header = () => {
                                 <NavLink to="/forms/markdown-editor">{t('markdown_editor')}</NavLink>
                             </li>
                             <li>
-                                <NavLink to="/forms/date-picker">{t('date_and_range_picker')}</NavLink>
+                                <NavLink to="/forms/Credit">{t('date_and_range_picker')}</NavLink>
                             </li>
                             <li>
                                 <NavLink to="/forms/clipboard">{t('clipboard')}</NavLink>
