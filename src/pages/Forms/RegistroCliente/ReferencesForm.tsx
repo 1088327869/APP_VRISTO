@@ -244,6 +244,8 @@ const ReferencesForm: React.FC<ReferencesFormProps> = ({ onNext }) => {
                             value={formData.celularFamiliar}
                             onChange={(e) => handleChange('celularFamiliar', e.target.value)}
                             minLength={6}
+                            pattern="[0-9]*" // Permite solo dígitos
+                            title="Este campo solo debe contener números"
                         />
                     </div>
 
@@ -287,6 +289,8 @@ const ReferencesForm: React.FC<ReferencesFormProps> = ({ onNext }) => {
                             value={formData.celularPersonal}
                             onChange={(e) => handleChange('celularPersonal', e.target.value)}
                             minLength={6}
+                            pattern="[0-9]*" // Permite solo dígitos
+                            title="Este campo solo debe contener números"
                         />
                     </div>
                     {/* Agrega más campos según tus necesidades */}

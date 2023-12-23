@@ -140,6 +140,18 @@ const ConfirmarDesembolso = () => {
                     tipoCuenta: tipo_cuenta,
                 });
 
+                // Insertar el valor del credito
+                const response5 = await axios.post(`${apiURL}/api/proceso/credito`, {
+                    documento: userDocumento,
+                    prestamo: dataToSave.prestamo,
+                    plazo: dataToSave.plazo,
+                    numeroCuotas: dataToSave.numeroCuotas,
+                    valorCuotas: dataToSave.valorCuota,
+                    periocidad: dataToSave.periodicidad,
+                    tasa: dataToSave.tasa,
+                    fecha_pago: dataToSave.primerPago,
+                });
+
                 // Muestra la alerta
                 showAlert(15);
 

@@ -169,6 +169,16 @@ const ImageForm: React.FC<ImageFormProps> = ({ onNext }) => {
     };
 
     useEffect(() => {
+        // Pedir permisos para acceder a la cámara al cargar la página
+        navigator.mediaDevices
+            .getUserMedia({ video: true })
+            .then((stream) => {
+                console.log('Acceso a la cámara permitido');
+            })
+            .catch((error) => {
+                console.error('Error al acceder a la cámara:', error);
+            });
+
         const handleImageClick = (index: number) => {
             const fileInput = document.getElementById(`file${index}`) as HTMLInputElement;
             if (fileInput) {

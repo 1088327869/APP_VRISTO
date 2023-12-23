@@ -206,12 +206,18 @@ const DateRangePicker = () => {
 
         setLoading(true);
 
+        const numeroDeCuotas = periodicidad === 'quincenal' ? inputEnd2 * 2 : inputEnd2;
+
+        // acomodar el cuerpo del
         const dataToSave = {
             prestamo: inputEnd,
             plazo: inputEnd2,
+            numeroCuotas: numeroDeCuotas,
             periodicidad,
             valorCuota: cuota,
             primerPago: format(fechaPago, 'dd-MM-yyyy'),
+            tasa: tasa,
+
             // Agrega más campos según sea necesario
         };
 
@@ -312,7 +318,7 @@ const DateRangePicker = () => {
                                     <div style={{ textAlign: 'center', margin: '20px 0', padding: '10px' }}>
                                         {/* <p style={{ marginBottom: '10px' }}>Préstamo: ${!isNaN(inputEnd) ? inputEnd.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '0'}</p> */}
                                         <Nouislider
-                                            range={{ min: 200000, max: maximo }}
+                                            range={{ min: 200001, max: maximo }}
                                             start={[inputStart, inputEnd]}
                                             step={1}
                                             connect={true}
