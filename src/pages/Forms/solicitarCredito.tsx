@@ -215,7 +215,7 @@ const DateRangePicker = () => {
             numeroCuotas: numeroDeCuotas,
             periodicidad,
             valorCuota: cuota,
-            primerPago: format(fechaPago, 'dd-MM-yyyy'),
+            primerPago: format(fechaPago, 'yyyy-MM-dd'),
             tasa: tasa,
 
             // Agrega más campos según sea necesario
@@ -308,58 +308,6 @@ const DateRangePicker = () => {
                         {/* inicio de col */}
                         <div className="pt-5 grid lg:grid-cols-2 grid-cols-1 gap-6">
                             {/* Seleccionar monto y plazo*/}
-                            <div className="panel" id="horizontal_form">
-                                <div className="flex items-center justify-between mb-5">
-                                    <h5 className="font-semibold text-lg dark:text-white-light">Seleccionar monto a solcicitar</h5>
-                                </div>
-
-                                {/* Primer rango */}
-                                <div className="mb-5 pt-10">
-                                    <div style={{ textAlign: 'center', margin: '20px 0', padding: '10px' }}>
-                                        {/* <p style={{ marginBottom: '10px' }}>Préstamo: ${!isNaN(inputEnd) ? inputEnd.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '0'}</p> */}
-                                        <Nouislider
-                                            range={{ min: 200001, max: maximo }}
-                                            start={[inputStart, inputEnd]}
-                                            step={1}
-                                            connect={true}
-                                            onSlide={handleSlider1Update}
-                                            tooltips={true}
-                                            format={{
-                                                to: (value: number) => `$ ${value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
-                                                from: (value: string) => parseFloat(value.replace(/\$|,/g, '')),
-                                            }}
-                                            disabled={true} // Deshabilitar la barra de inputStart
-                                        />
-                                        <div className="container d-flex justify-content-between" style={{ margin: '5px' }}>
-                                            <h1 className="text-end">Max : $ {maximo.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</h1>
-                                        </div>
-                                    </div>
-
-                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-4 mt-9"></div>
-                                </div>
-                                {/* Monto */}
-                                <div className="mb-5 pt-10">
-                                    <Nouislider
-                                        range={{ min: 2, max: plazo_maximo }}
-                                        start={[2, inputEnd2]}
-                                        step={1}
-                                        connect={true}
-                                        tooltips={true}
-                                        onSlide={handleSlider1Update}
-                                        format={{
-                                            to: (value: number) => ` ${value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
-                                            from: (value: string) => parseFloat(value.replace(/\$|,/g, '')),
-                                        }}
-                                        disabled={true}
-                                    />
-
-                                    <div className="container d-flex justify-content-between" style={{ margin: '5px' }}>
-                                        <h1 className="text-end">Max : {formData.plazo}</h1>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Informacion */}
                             <div className="panel" id="horizontal_form">
                                 <div className="flex items-center justify-between mb-5">
                                     <h5 className="font-semibold text-lg dark:text-white-light">Detalle de la solicitud</h5>
@@ -527,6 +475,58 @@ const DateRangePicker = () => {
                                         />
                                     </div>
                                 </div> */}
+                                </div>
+                            </div>
+
+                            {/* Informacion */}
+                            <div className="panel" id="horizontal_form">
+                                <div className="flex items-center justify-between mb-5">
+                                    <h5 className="font-semibold text-lg dark:text-white-light">Seleccionar monto a solcicitar</h5>
+                                </div>
+
+                                {/* Primer rango */}
+                                <div className="mb-5 pt-10">
+                                    <div style={{ textAlign: 'center', margin: '20px 0', padding: '10px' }}>
+                                        {/* <p style={{ marginBottom: '10px' }}>Préstamo: ${!isNaN(inputEnd) ? inputEnd.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '0'}</p> */}
+                                        <Nouislider
+                                            range={{ min: 200001, max: maximo }}
+                                            start={[inputStart, inputEnd]}
+                                            step={1}
+                                            connect={true}
+                                            onSlide={handleSlider1Update}
+                                            tooltips={true}
+                                            format={{
+                                                to: (value: number) => `$ ${value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
+                                                from: (value: string) => parseFloat(value.replace(/\$|,/g, '')),
+                                            }}
+                                            disabled={true} // Deshabilitar la barra de inputStart
+                                        />
+                                        <div className="container d-flex justify-content-between" style={{ margin: '5px' }}>
+                                            <h1 className="text-end">Max : $ {maximo.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</h1>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-4 mt-9"></div>
+                                </div>
+                                {/* Monto */}
+                                <div className="mb-5 pt-10">
+                                    <Nouislider
+                                        range={{ min: 2, max: plazo_maximo }}
+                                        start={[2, inputEnd2]}
+                                        step={1}
+                                        connect={true}
+                                        tooltips={true}
+                                        onSlide={handleSlider1Update}
+                                        format={{
+                                            to: (value: number) => ` ${value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
+                                            from: (value: string) => parseFloat(value.replace(/\$|,/g, '')),
+                                        }}
+                                        disabled={true}
+                                    />
+
+                                    <div className="container d-flex justify-content-between" style={{ margin: '5px' }}>
+                                        <h1 className="text-end">Max : {formData.plazo}</h1>
+                                    </div>
                                 </div>
                             </div>
                         </div>

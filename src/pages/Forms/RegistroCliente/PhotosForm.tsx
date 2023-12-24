@@ -244,7 +244,7 @@ const ImageForm: React.FC<ImageFormProps> = ({ onNext }) => {
                                 className="form-input form-input-lg"
                                 onChange={(e) => handleFileChange(index, e.target.files ? e.target.files[0] : null)}
                                 accept="image/*,application/pdf"
-                                capture="environment"
+                                // capture="environment"  //se selecciona si se quiere que solo sea foto tomada
                             />
                             {selectedImageUrls[index - 1] ? (
                                 <div className="selected-image-container" onClick={() => handleFileSelectionClick(index)}>

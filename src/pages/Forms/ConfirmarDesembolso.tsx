@@ -151,6 +151,19 @@ const ConfirmarDesembolso = () => {
                     tasa: dataToSave.tasa,
                     fecha_pago: dataToSave.primerPago,
                 });
+                console.log('datos', response5.data.prestamo_ID);
+
+                const response6 = await axios.post(`${apiURL}/api/montar/credito`, {
+                    prestamo_id: response5.data.prestamo_ID,
+                    documento: userDocumento,
+                    prestamo: dataToSave.prestamo,
+                    plazo: dataToSave.plazo,
+                    periocidad: dataToSave.periodicidad,
+                    tasa: dataToSave.tasa,
+                    fecha_pago: dataToSave.primerPago,
+                });
+
+                console.log('amortizador', response6);
 
                 // Muestra la alerta
                 showAlert(15);

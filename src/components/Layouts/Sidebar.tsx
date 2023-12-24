@@ -33,10 +33,16 @@ import IconMenuAuthentication from '../Icon/Menu/IconMenuAuthentication';
 import IconMenuDocumentation from '../Icon/Menu/IconMenuDocumentation';
 import useClearToken from '../../pages/Authentication/login/ClearToken';
 import React, { ReactNode } from 'react';
+import axios from 'axios';
+import getApiUrl from '../../../config';
 
 interface ExternalLinkProps {
     to: string;
     children: ReactNode;
+}
+
+interface FormData {
+    estado: string;
 }
 
 const ExternalLink: React.FC<ExternalLinkProps> = ({ to, children }) => (
@@ -72,7 +78,35 @@ const Sidebar = () => {
         useClearToken(); // Usar useClearToken en lugar de clearToken
     };
 
+    const apiURL = getApiUrl();
+
     useEffect(() => {
+        const storedUsdDate = localStorage.getItem('userData');
+        const userDocumento = storedUsdDate ? JSON.parse(storedUsdDate) : {};
+
+        const fetchData = async () => {
+            try {
+                const response2 = await axios.post(`${apiURL}/api/menu/enEstudio`, {
+                    userDocumento: userDocumento,
+                });
+
+                const estudio_registro = response2.data.estado;
+
+                // // Actualiza el estado formData con los datos de la API
+                setFormData((prevData) => {
+                    return {
+                        ...prevData,
+
+                        estado: estudio_registro,
+                    };
+                });
+            } catch (error) {
+                console.error('Error al obtener datos de la API:', error);
+            }
+        };
+
+        fetchData();
+
         const selector = document.querySelector('.sidebar ul a[href="' + window.location.pathname + '"]');
         if (selector) {
             selector.classList.add('active');
@@ -89,12 +123,18 @@ const Sidebar = () => {
         }
     }, []);
 
+    const [formData, setFormData] = useState<FormData>({
+        estado: '', // Asignamos '0' como valor inicial para estado
+    });
+
     useEffect(() => {
         if (window.innerWidth < 1024 && themeConfig.sidebar) {
             dispatch(toggleSidebar());
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location]);
+
+    const [apiData, setApiData] = useState<any>(null);
 
     return (
         <div className={semidark ? 'dark' : ''}>
@@ -157,26 +197,28 @@ const Sidebar = () => {
                                 <span>{t('APLICACIONES')}</span>
                             </h2>
 
-                            <li className="nav-item">
-                                <ul>
-                                    <li className="nav-item">
-                                        <NavLink to="/" className="group">
-                                            <div className="flex items-center">
-                                                <IconMenuWidgets className="group-hover:!text-primary shrink-0" />
-                                                <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Mis creditos')}</span>
-                                            </div>
-                                        </NavLink>
-                                    </li>
-                                    <li className="nav-item">
-                                        <NavLink to="/apps/pay" className="group">
-                                            <div className="flex items-center">
-                                                <IconMenuTodo className="group-hover:!text-primary shrink-0" />
-                                                <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Pagar')}</span>
-                                            </div>
-                                        </NavLink>
-                                    </li>
+                            {/* Aquí agregamos la condición */}
+                            {formData.estado === 'EN ESTUDIO' || formData.estado === 'APROBADO' || formData.estado === 'RECHAZADO' ? (
+                                <li className="nav-item">
+                                    <ul>
+                                        <li className="nav-item">
+                                            <NavLink to="/" className="group">
+                                                <div className="flex items-center">
+                                                    <IconMenuWidgets className="group-hover:!text-primary shrink-0" />
+                                                    <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Mis creditos')}</span>
+                                                </div>
+                                            </NavLink>
+                                        </li>
+                                        <li className="nav-item">
+                                            <NavLink to="/apps/pay" className="group">
+                                                <div className="flex items-center">
+                                                    <IconMenuTodo className="group-hover:!text-primary shrink-0" />
+                                                    <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Pagar')}</span>
+                                                </div>
+                                            </NavLink>
+                                        </li>
 
-                                    {/* <li className="menu nav-item">
+                                        {/* <li className="menu nav-item">
                                         <button type="button" className={`${currentMenu === 'invoice' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('invoice')}>
                                             <div className="flex items-center">
                                                 <IconMenuInvoice className="group-hover:!text-primary shrink-0" />
@@ -206,7 +248,7 @@ const Sidebar = () => {
                                         </AnimateHeight>
                                     </li> */}
 
-                                    {/* <li className="nav-item">
+                                        {/* <li className="nav-item">
                                         <NavLink to="/apps/calendar" className="group">
                                             <div className="flex items-center">
                                                 <IconMenuCalendar className="group-hover:!text-primary shrink-0" />
@@ -215,42 +257,52 @@ const Sidebar = () => {
                                         </NavLink>
                                     </li> */}
 
-                                    <li className="nav-item">
-                                        <NavLink to="https://acortar.link/zlAEfS" className="group">
-                                            <div className="flex items-center">
-                                                <IconMenuChat className="group-hover:!text-primary shrink-0" />
-                                                <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Chat')}</span>
-                                            </div>
-                                        </NavLink>
-                                    </li>
+                                        <li className="nav-item">
+                                            <NavLink to="https://acortar.link/zlAEfS" className="group">
+                                                <div className="flex items-center">
+                                                    <IconMenuChat className="group-hover:!text-primary shrink-0" />
+                                                    <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Chat')}</span>
+                                                </div>
+                                            </NavLink>
+                                        </li>
 
-                                    <li className="nav-item">
-                                        <NavLink to="/apps/notes" className="group">
-                                            <div className="flex items-center">
-                                                <IconMenuNotes className="group-hover:!text-primary shrink-0" />
-                                                <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('contacto')}</span>
-                                            </div>
-                                        </NavLink>
-                                    </li>
-                                    <li className="nav-item">
-                                        <NavLink to="/forms/wizards/actualizar" className="group">
-                                            <div className="flex items-center">
-                                                <IconMenuContacts className="group-hover:!text-primary shrink-0" />
-                                                <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Actualizar datos')}</span>
-                                            </div>
-                                        </NavLink>
-                                    </li>
-                                    <li className="nav-item">
-                                        <NavLink to="/forms/Credit" className="group">
-                                            <div className="flex items-center">
-                                                <IconMenuForms className="group-hover:!text-primary shrink-0" />
-                                                <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Solicitar Crédito')}</span>
-                                            </div>
-                                        </NavLink>
-                                    </li>
-                                </ul>
-                            </li>
-
+                                        {/* <li className="nav-item">
+                                            <NavLink to="/apps/notes" className="group">
+                                                <div className="flex items-center">
+                                                    <IconMenuNotes className="group-hover:!text-primary shrink-0" />
+                                                    <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('contacto')}</span>
+                                                </div>
+                                            </NavLink>
+                                        </li> */}
+                                        <li className="nav-item">
+                                            <NavLink to="/forms/wizards/actualizar" className="group">
+                                                <div className="flex items-center">
+                                                    <IconMenuContacts className="group-hover:!text-primary shrink-0" />
+                                                    <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Actualizar datos')}</span>
+                                                </div>
+                                            </NavLink>
+                                        </li>
+                                        <li className="nav-item">
+                                            <NavLink to="/forms/Credit" className="group">
+                                                <div className="flex items-center">
+                                                    <IconMenuForms className="group-hover:!text-primary shrink-0" />
+                                                    <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Solicitar Crédito')}</span>
+                                                </div>
+                                            </NavLink>
+                                        </li>
+                                    </ul>
+                                </li>
+                            ) : (
+                                // Renderizar el contenido alternativo si formData.estado no es 'EN ESTUDIO', 'APROBADO' ni 'RECHAZADO'
+                                <li className="nav-item">
+                                    <NavLink to="https://acortar.link/zlAEfS" className="group">
+                                        <div className="flex items-center">
+                                            <IconMenuChat className="group-hover:!text-primary shrink-0" />
+                                            <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Chat')}</span>
+                                        </div>
+                                    </NavLink>
+                                </li>
+                            )}
                             <h2 className="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
                                 <IconMinus className="w-4 h-5 flex-none hidden" />
                                 <span>{t('Otros')}</span>
@@ -766,3 +818,6 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+function fetchData() {
+    throw new Error('Function not implemented.');
+}

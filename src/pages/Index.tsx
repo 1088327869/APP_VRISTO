@@ -267,17 +267,6 @@ const Index = () => {
             <div className="panel h-full lg:h-auto">
                 <div className="pt-5">
                     <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-5 mb-5" style={{ gridTemplateRows: 'auto auto auto' }}>
-                        {/* Mi cupo */}
-                        <div className="panel h-full">
-                            <div className="flex items-center mb-5">
-                                <h5 className="font-semibold text-lg dark:text-white-light">Mi cupo</h5>
-                            </div>
-                            <div>
-                                <div className="bg-white dark:bg-black rounded-lg overflow-hidden">
-                                    <ReactApexChart series={salesByCategory.series} options={salesByCategory.options} type="donut" height={460} />
-                                </div>
-                            </div>
-                        </div>
                         {/* Perfil */}
                         <div className="panel h-full">
                             <div className="flex items-center justify-between mb-5">
@@ -341,6 +330,17 @@ const Index = () => {
                                         </button>
                                     </li>
                                 </ul>
+                            </div>
+                        </div>
+                        {/* Mi cupo */}
+                        <div className="panel h-full">
+                            <div className="flex items-center mb-5">
+                                <h5 className="font-semibold text-lg dark:text-white-light">Mi cupo</h5>
+                            </div>
+                            <div>
+                                <div className="bg-white dark:bg-black rounded-lg overflow-hidden">
+                                    <ReactApexChart series={salesByCategory.series} options={salesByCategory.options} type="donut" height={460} />
+                                </div>
                             </div>
                         </div>
                         {/* Mis Creditos */}
