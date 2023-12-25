@@ -75,7 +75,7 @@ const ConfirmarMsm = () => {
         setLoading(true);
         // Obtener los datos de localStorage
         const formDataFromLocalStorage = JSON.parse(localStorage.getItem('formData') || '{}');
-
+        // validar codigo
         try {
             // Realiza la solicitud a la API
 

@@ -107,14 +107,35 @@ const ConfirmarDesembolso = () => {
         // Marcamos el inicio del área de loading
         setLoading(true);
 
-        // Validación del código
-        if (inputCodigo === undefined || inputCodigo.toString().length < 4) {
-            setCodigoError(' ');
-            setLoading(false); // Marcamos el final del área de loading
+        // validar codigo
+        try {
+            // Realiza la solicitud a la API
 
-            showAlerterror(15);
+            const codigoResponse = await axios.post(`${apiURL}/api/consultar/programar`, {
+                userDocumento: userDocumento,
+                envioCodigo: inputCodigo,
+            });
+            console.log('codigo generado', codigoResponse);
+            // Realiza acciones adicionales después de una respuesta exitosa si es necesario
+        } catch (error) {
+            // Maneja el error, muestra un mensaje o realiza acciones necesarias
+            console.error('Error al obtener datos de la API:', error);
 
-            return;
+            // Verifica si el error es una respuesta 400 (Bad Request)
+            if (axios.isAxiosError(error)) {
+                // Muestra el mensaje de intento máximo permitido
+
+                setCodigoError(' ');
+                showAlerterror(15);
+                // Rompe la ejecución de la función aquí
+                return;
+            } else {
+                // Si el error no es una respuesta 400, maneja de alguna otra manera si es necesario
+                // ...
+            }
+        } finally {
+            // Este bloque se ejecutará independientemente de si hubo un error o no
+            setLoading(false); // Actualiza el estado de carga en tu componente
         }
 
         // Obtén los datos almacenados en localStorage
@@ -161,6 +182,12 @@ const ConfirmarDesembolso = () => {
                     periocidad: dataToSave.periodicidad,
                     tasa: dataToSave.tasa,
                     fecha_pago: dataToSave.primerPago,
+                });
+
+                // Realiza la solicitud POST al servidor
+                const hablame = await axios.post(`${apiURL}/api/confirmar/desembolso`, {
+                    userDocumento: userDocumento,
+                    prestamo: dataToSave.prestamo,
                 });
 
                 console.log('amortizador', response6);
