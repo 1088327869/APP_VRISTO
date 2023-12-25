@@ -12,6 +12,7 @@ import GridLoader from 'react-spinners/GridLoader'; // genera el icono del loagi
 import '../../assets/css/app.css'; //  css de login
 import { addDays, format } from 'date-fns';
 import Swal from 'sweetalert2';
+import { AxiosError } from 'axios';
 
 interface FormData {
     TotalCupo: string;
@@ -199,12 +200,46 @@ const DateRangePicker = () => {
         setPeriodicidad(event.target.value);
     };
 
-    const handleAceptarClick = () => {
+    const handleAceptarClick = async () => {
         // Obtén la información que deseas guardar
 
         // Marcamos el inicio del área de loading
-
         setLoading(true);
+
+        // generar codigo de validacion
+
+        try {
+            // Realiza la solicitud a la API
+            const codigoResponse = await axios.post(`${apiURL}/api/codigo/credito`, {
+                userDocumento: userDocumento,
+            });
+            console.log('codigo generado', codigoResponse);
+            // Realiza acciones adicionales después de una respuesta exitosa si es necesario
+        } catch (error) {
+            // Maneja el error, muestra un mensaje o realiza acciones necesarias
+            console.error('Error al obtener datos de la API:', error);
+
+            // Verifica si el error es una respuesta 400 (Bad Request)
+            if (axios.isAxiosError(error)) {
+                // Muestra el mensaje de intento máximo permitido
+                Swal.fire({
+                    title: 'Intento máximo permitido',
+                    text: `Comunícate con nosotros a la línea de atención 📞 (604)4310350`,
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#dc3545', // Color rojo
+                    timer: 15000,
+                });
+                // Rompe la ejecución de la función aquí
+                return;
+            } else {
+                // Si el error no es una respuesta 400, maneja de alguna otra manera si es necesario
+                // ...
+            }
+        } finally {
+            // Este bloque se ejecutará independientemente de si hubo un error o no
+            setLoading(false); // Actualiza el estado de carga en tu componente
+        }
 
         const numeroDeCuotas = periodicidad === 'quincenal' ? inputEnd2 * 2 : inputEnd2;
 

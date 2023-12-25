@@ -438,7 +438,7 @@ const PersonalInfoForm: React.FC<{ onNext: () => void }> = ({ onNext }) => {
                         <Select
                             value={documentTypeOptions.find((option) => option.value === formData.tipoDocumento) || null}
                             options={documentTypeOptions}
-                            isSearchable={true}
+                            isSearchable={false}
                             onChange={(selectedOption) => handleChange('tipoDocumento', selectedOption ? selectedOption.value : '')}
                         />
                     </div>

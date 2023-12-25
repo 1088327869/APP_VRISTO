@@ -71,140 +71,126 @@ const ConfirmarMsm = () => {
     const submitForm = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        try {
-            // Marcamos el inicio del área de loading
-            setLoading(true);
-            // Obtener los datos de localStorage
-            const formDataFromLocalStorage = JSON.parse(localStorage.getItem('formData') || '{}');
+        // Marcamos el inicio del área de loading
+        setLoading(true);
+        // Obtener los datos de localStorage
+        const formDataFromLocalStorage = JSON.parse(localStorage.getItem('formData') || '{}');
 
-            Swal.fire({
-                title: 'Codigo incorrecto',
-                text: 'tu codigo es incorrecto, intenta nuevamente',
-                icon: 'error',
-                confirmButtonText: 'Aceptar',
-                confirmButtonColor: '#dc3545', // Color rojo
-                timer: 7000,
-            });
+        try {
+            // Realiza la solicitud a la API
 
             const codigoResponse = await axios.post(`${apiURL}/api/consultar/programar`, {
                 userDocumento: parseInt(formDataFromLocalStorage.documento),
                 envioCodigo: parseInt(codigoValue),
             });
+            console.log('codigo generado', codigoResponse);
+            // Realiza acciones adicionales después de una respuesta exitosa si es necesario
+        } catch (error) {
+            // Maneja el error, muestra un mensaje o realiza acciones necesarias
+            console.error('Error al obtener datos de la API:', error);
 
-            if (codigoResponse.status === 200) {
-                const userData = codigoResponse.data.userData;
-                console.log('Código exitoso. Datos encontrados:', userData);
-
-                // Resto del código aquí si la respuesta es exitosa
-            } else if (codigoResponse.status === 404) {
-                // Código de respuesta 404
-                console.error('Error en la solicitud. Código no exitoso:', codigoResponse);
-
-                // Muestra una alerta al usuario indicando que el código es incorrecto
+            // Verifica si el error es una respuesta 400 (Bad Request)
+            if (axios.isAxiosError(error)) {
+                // Muestra el mensaje de intento máximo permitido
                 Swal.fire({
                     title: 'Código incorrecto',
-                    text: 'Tu código es incorrecto. Verifica el código ingresado.',
+                    text: 'Verifica tu código e intenta de nuevo',
                     icon: 'error',
                     confirmButtonText: 'Aceptar',
                     confirmButtonColor: '#dc3545', // Color rojo
-                    timer: 7000,
+                    timer: 15000,
+                    customClass: {
+                        icon: 'fa fa-phone', // Añade el ícono de teléfono a la clase del ícono
+                    },
                 });
+
+                // Rompe la ejecución de la función aquí
+                return;
             } else {
-                // Otro código de respuesta no es 200 ni 404
-                console.error('Error en la solicitud. Código no exitoso:', codigoResponse);
-
-                // Mostrar mensaje específico del servidor si está disponible
-                if (codigoResponse.data && codigoResponse.data.message) {
-                    console.error('Mensaje del servidor:', codigoResponse.data.message);
-                }
-
-                // Para otros errores, muestra un mensaje genérico
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Hubo un problema con el código ingresado.',
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar',
-                    confirmButtonColor: '#dc3545', // Color rojo
-                });
+                // Si el error no es una respuesta 400, maneja de alguna otra manera si es necesario
+                // ...
             }
+        } finally {
+            // Este bloque se ejecutará independientemente de si hubo un error o no
+            setLoading(false); // Actualiza el estado de carga en tu componente
+        }
 
-            const response = await fetch(`${apiURL}/api/user`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    nombre: formDataFromLocalStorage.nombre,
-                    apellido: formDataFromLocalStorage.apellido,
-                    tipo: formDataFromLocalStorage.tipo.toLowerCase(),
-                    documento: parseInt(formDataFromLocalStorage.documento),
-                    telefono: parseInt(formDataFromLocalStorage.telefono),
-                    email: formDataFromLocalStorage.email,
-                    password: formDataFromLocalStorage.password,
-                }),
+        const response = await fetch(`${apiURL}/api/user`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                nombre: formDataFromLocalStorage.nombre,
+                apellido: formDataFromLocalStorage.apellido,
+                tipo: formDataFromLocalStorage.tipo.toLowerCase(),
+                documento: parseInt(formDataFromLocalStorage.documento),
+                telefono: parseInt(formDataFromLocalStorage.telefono),
+                email: formDataFromLocalStorage.email,
+                password: formDataFromLocalStorage.password,
+            }),
+        });
+
+        if (response.ok) {
+            Swal.fire({
+                title: 'Registro exitoso',
+                text: 'Estás a un paso de obtener tu crédito rotativo.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#dc3545', // Color rojo
+                timer: 7000,
             });
 
-            if (response.ok) {
-                Swal.fire({
-                    title: 'Registro exitoso',
-                    text: 'Estás a un paso de obtener tu crédito rotativo.',
-                    icon: 'success',
-                    confirmButtonText: 'Aceptar',
-                    confirmButtonColor: '#dc3545', // Color rojo
-                    timer: 7000,
-                });
+            console.log('Datos guardados exitosamente');
+            // Generar consultar para generar el login
+            const response = await axios.post(`${apiURL}/api/login`, {
+                cedula_envi: parseInt(formDataFromLocalStorage.documento),
+                password_envi: formDataFromLocalStorage.password,
+            });
 
-                console.log('Datos guardados exitosamente');
-                // Generar consultar para generar el login
-                const response = await axios.post(`${apiURL}/api/login`, {
-                    cedula_envi: parseInt(formDataFromLocalStorage.documento),
-                    password_envi: formDataFromLocalStorage.password,
-                });
+            if (response.status === 200) {
+                const data = response.data;
+                console.log('Login exitoso:', data);
 
-                if (response.status === 200) {
-                    const data = response.data;
-                    console.log('Login exitoso:', data);
+                if (data.token) {
+                    localStorage.setItem('userData', JSON.stringify(formDataFromLocalStorage.documento));
+                    localStorage.setItem('token', data.token);
 
-                    if (data.token) {
-                        localStorage.setItem('userData', JSON.stringify(formDataFromLocalStorage.documento));
-                        localStorage.setItem('token', data.token);
+                    // Eliminar datos de localStorage
+                    localStorage.removeItem('formData');
 
-                        // Eliminar datos de localStorage
-                        localStorage.removeItem('formData');
+                    // Marcamos el final del área de loading
+                    setLoading(false);
 
-                        // Marcamos el final del área de loading
-                        setLoading(false);
-
-                        navigate('/forms/wizards');
-                    }
+                    navigate('/forms/wizards');
                 }
-
-                // Eliminar datos de localStorage
-                // localStorage.removeItem('formData');
-
-                // Marcamos el final del área de loading
-                setLoading(false);
-                // Redirigir a la nueva URL
-                // navigate('/forms/wizards');
-            } else {
-                console.error('Error al guardar los datos en el servidor');
-                Swal.fire({
-                    title: 'Ya existe un registro',
-                    text: 'Ya estás registrado. Si olvidaste tu contraseña, puedes recuperarla.',
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar',
-                    confirmButtonColor: '#dc3545', // Color rojo
-                    timer: 8000,
-                });
-                // Marcamos el final del área de loading
-                setLoading(false);
-                navigate('/auth/boxed-password-reset');
             }
-        } catch (error) {
-            // console.error('Error en la solicitud:', error);
+
+            // Eliminar datos de localStorage
+            // localStorage.removeItem('formData');
+
             // Marcamos el final del área de loading
             setLoading(false);
+            // Redirigir a la nueva URL
+            // navigate('/forms/wizards');
+        } else {
+            console.error('Error al guardar los datos en el servidor');
+            Swal.fire({
+                title: 'Ya existe un registro',
+                text: 'Ya estás registrado. Si olvidaste tu contraseña, puedes recuperarla.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#dc3545', // Color rojo
+                timer: 8000,
+            });
+            // Marcamos el final del área de loading
+            setLoading(false);
+            navigate('/auth/boxed-password-reset');
         }
+
+        // console.error('Error en la solicitud:', error);
+        // Marcamos el final del área de loading
+        setLoading(false);
     };
 
     return (

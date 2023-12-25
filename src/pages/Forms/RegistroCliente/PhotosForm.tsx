@@ -151,7 +151,8 @@ const ImageForm: React.FC<ImageFormProps> = ({ onNext }) => {
             // Marcamos el final del área de loading
             setLoading(false);
 
-            navigate('/');
+            // navigate('/');
+            window.location.href = '/';
         }
     };
 
