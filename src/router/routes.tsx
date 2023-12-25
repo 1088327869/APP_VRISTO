@@ -80,6 +80,8 @@ const ERROR500 = lazy(() => import('../pages/Pages/Error500'));
 const ERROR503 = lazy(() => import('../pages/Pages/Error503'));
 const Maintenence = lazy(() => import('../pages/Pages/Maintenence'));
 const LoginBoxed = lazy(() => import('../pages/Authentication/login/LoginBoxed'));
+const RecuperarContrasena = lazy(() => import('../pages/Authentication/login/RecuperarContraseña'));
+const NuevaContrasena = lazy(() => import('../pages/Authentication/login/nuevacontrasena'));
 const RegisterBoxed = lazy(() => import('../pages/Authentication/RegisterBoxed'));
 const UnlockBoxed = lazy(() => import('../pages/Authentication/UnlockBox'));
 const ConfirmarMsm = lazy(() => import('../pages/Authentication/login/ConfrimarMensaje'));
@@ -459,6 +461,17 @@ const routes = [
         element: <LoginBoxed />,
         layout: 'blank',
     },
+
+    {
+        path: '/login/password',
+        element: <RecuperarContrasena />,
+        layout: 'blank',
+    },
+    {
+        path: '/new/password',
+        element: <NuevaContrasena />,
+        layout: 'blank',
+    },
     {
         path: '/auth/boxed-signup',
         element: <RegisterBoxed />,
@@ -476,7 +489,7 @@ const routes = [
         layout: 'blank',
     },
     {
-        path: '/auth/boxed-password-reset',
+        path: '/login/recuperar',
         element: <RecoverIdBoxed />,
         layout: 'blank',
     },

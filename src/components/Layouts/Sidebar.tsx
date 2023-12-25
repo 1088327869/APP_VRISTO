@@ -318,7 +318,7 @@ const Sidebar = () => {
                             </li>
 
                             {/* Desues de aca son menus que no se va a usar para el manejo de la aplicacion */}
-                            {/*
+
                             <div>
                                 <li className="menu nav-item">
                                     <button type="button" className={`${currentMenu === 'component' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('component')}>
@@ -759,7 +759,7 @@ const Sidebar = () => {
                                                 </NavLink>
                                             </li>
                                             <li>
-                                                <NavLink to="/auth/boxed-password-reset" target="_blank">
+                                                <NavLink to="/login/password" target="_blank">
                                                     {t('recover_id_boxed')}
                                                 </NavLink>
                                             </li>
@@ -810,7 +810,7 @@ const Sidebar = () => {
                                         </div>
                                     </NavLink>
                                 </li>
-                            </div>*/}
+                            </div>
                         </ul>
                     </PerfectScrollbar>
                 </div>

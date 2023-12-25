@@ -185,7 +185,7 @@ const ConfirmarMsm = () => {
             });
             // Marcamos el final del área de loading
             setLoading(false);
-            navigate('/auth/boxed-password-reset');
+            navigate('/login/password');
         }
 
         // console.error('Error en la solicitud:', error);

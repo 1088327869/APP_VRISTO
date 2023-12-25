@@ -20,7 +20,7 @@ import '../../../assets/css/app.css';
 
 const apiURL = getApiUrl();
 
-const LoginBoxed = () => {
+const NuevaContrasena = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -31,8 +31,8 @@ const LoginBoxed = () => {
 
     const [flag, setFlag] = useState(themeConfig.locale);
     const [formData, setFormData] = useState({
-        cedula_envi: '',
-        password_envi: '',
+        codigo: '',
+        confirmarContraseña: '',
     });
 
     useEffect(() => {
@@ -48,88 +48,69 @@ const LoginBoxed = () => {
         e.preventDefault();
 
         try {
-            // Marcamos el inicio del área de loading
+            // inicio de loading
             setLoading(true);
-            const response = await axios.post(`${apiURL}/api/login`, formData);
+            // traer datos de local storeg
+            const documentoGuardado = localStorage.getItem('documento');
+            // consultar y validar el codigo
+            const response = await axios.post(`${apiURL}/api/consultar/programar`, {
+                userDocumento: documentoGuardado,
+                envioCodigo: parseInt(formData.codigo, 10),
+            });
 
-            if (response.status === 200) {
+            if (response.status >= 200 && response.status < 300) {
                 const data = response.data;
-                console.log('Login exitoso:', data);
+                console.log('codigo correctos:', data);
 
-                // Swal.fire({
-                //     title: 'Inicio de sesión exitoso',
-                //     text: '¡Bienvenido de nuevo!',
-                //     icon: 'success',
-                //     confirmButtonText: 'Aceptar',
-                //     confirmButtonColor: '#dc3545', // Color rojo
-                //     timer: 7000,
-                // });
-
-                localStorage.setItem('userData', JSON.stringify(formData.cedula_envi));
+                Swal.fire({
+                    title: 'Código exitoso',
+                    text: 'Nueva clave registrada',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#dc3545',
+                    timer: 8000,
+                });
 
                 try {
-                    const consultarRegistroResponse = await axios.post(`${apiURL}/api/consultar/Registro`, { documento: formData.cedula_envi });
+                    // Segunda solicitud para cambiar la contraseña
+                    const hablame = await axios.post(`${apiURL}/api/nueva/password`, {
+                        userDocumento: documentoGuardado,
+                        password: formData.confirmarContraseña,
+                    });
 
-                    if (consultarRegistroResponse.status === 200) {
-                        // Marcamos el final del área de loading
+                    // Manejar la respuesta de la segunda solicitud
+                    if (hablame.status >= 200 && hablame.status < 300) {
+                        // Elimina el elemento con clave 'documento' del localStorage
+                        localStorage.removeItem('documento');
+
+                        console.log('seguna solicitud', hablame);
+
                         setLoading(false);
-
-                        Swal.fire({
-                            title: 'Inicio de sesión exitoso',
-                            text: '¡Bienvenido de nuevo!',
-                            icon: 'success',
-                            confirmButtonText: 'Aceptar',
-                            confirmButtonColor: '#dc3545', // Color rojo
-                            timer: 7000,
-                        });
-
-                        navigate('/');
+                        navigate('/auth/boxed-signin');
                     } else {
-                        console.log(consultarRegistroResponse.data.message);
-
-                        // Marcamos el final del área de loading
-                        setLoading(false);
-
-                        Swal.fire({
-                            title: 'Inicio de sesión exitoso',
-                            text: '¡Bienvenido de nuevo!',
-                            icon: 'success',
-                            confirmButtonText: 'Aceptar',
-                            confirmButtonColor: '#dc3545', // Color rojo
-                            timer: 7000,
-                        });
-
-                        navigate('/forms/wizards');
+                        console.error('Error al cambiar la contraseña:', hablame.data);
+                        // Tratar el caso en que la respuesta no sea 200-299
                     }
                 } catch (error) {
-                    console.error('Error haciendo la consulta:', error);
-                    navigate('/forms/wizards');
-                }
-
-                if (data.token) {
-                    localStorage.setItem('token', data.token);
+                    console.error('Error en la segunda solicitud:', error);
+                    // Manejar errores de la segunda solicitud
                 }
             } else {
-                // Tratar el caso en que la respuesta no sea 200
                 console.error('Error en el inicio de sesión:', response.data);
+                // Tratar el caso en que la respuesta no sea 200-299
             }
         } catch (error) {
-            // Error en la solicitud
             console.error('Error en la solicitud:', error);
 
-            // Marcamos el final del área de loading
-            setLoading(false);
-
             Swal.fire({
-                title: 'Datos incorrectos',
-                text: 'Por favor, verifique los datos ingresados e inténtelo de nuevo',
+                title: 'Codigo incorrecto',
+                text: 'Por favor, verifique el codigo e inténtelo de nuevo',
                 icon: 'error',
                 confirmButtonText: 'Aceptar',
-                confirmButtonColor: '#dc3545', // Color rojo
+                confirmButtonColor: '#dc3545',
                 timer: 7000,
             });
         } finally {
-            // Asegura que el loading se haya finalizado incluso en caso de error
             setLoading(false);
         }
     };
@@ -163,47 +144,6 @@ const LoginBoxed = () => {
                 <img src="/assets/images/auth/polygon-object.svg" alt="image" className="absolute bottom-0 end-[28%]" />
                 <div className="relative w-full max-w-[870px] rounded-md bg-[linear-gradient(45deg,#fff9f9_0%,rgba(255,255,255,0)_25%,rgba(255,255,255,0)_75%,_#fff9f9_100%)] p-2 dark:bg-[linear-gradient(52.22deg,#0E1726_0%,rgba(14,23,38,0)_18.66%,rgba(14,23,38,0)_51.04%,rgba(14,23,38,0)_80.07%,#0E1726_100%)]">
                     <div className="relative flex flex-col justify-center rounded-md bg-white/60 backdrop-blur-lg dark:bg-black/50 px-6 lg:min-h-[758px] py-20">
-                        <div className="absolute top-6 end-6">
-                            {/* <div className="dropdown">
-                                <Dropdown
-                                    offset={[0, 8]}
-                                    placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
-                                    btnClassName="flex items-center gap-2.5 rounded-lg border border-white-dark/30 bg-white px-2 py-1.5 text-white-dark hover:border-primary hover:text-primary dark:bg-black"
-                                    button={
-                                        <>
-                                            <div>
-                                                <img src={`/assets/images/flags/${flag.toUpperCase()}.svg`} alt="image" className="h-5 w-5 rounded-full object-cover" />
-                                            </div>
-                                            <div className="text-base font-bold uppercase">{flag}</div>
-                                            <span className="shrink-0">
-                                                <IconCaretDown />
-                                            </span>
-                                        </>
-                                    }
-                                >
-                                    <ul className="!px-2 text-dark dark:text-white-dark grid grid-cols-2 gap-2 font-semibold dark:text-white-light/90 w-[280px]">
-                                        {themeConfig.languageList.map((item: any) => {
-                                            return (
-                                                <li key={item.code}>
-                                                    <button
-                                                        type="button"
-                                                        className={`flex w-full hover:text-primary rounded-lg ${flag === item.code ? 'bg-primary/10 text-primary' : ''}`}
-                                                        onClick={() => {
-                                                            i18next.changeLanguage(item.code);
-                                                            // setFlag(item.code);
-                                                            setLocale(item.code);
-                                                        }}
-                                                    >
-                                                        <img src={`/assets/images/flags/${item.code.toUpperCase()}.svg`} alt="flag" className="w-5 h-5 object-cover rounded-full" />
-                                                        <span className="ltr:ml-3 rtl:mr-3">{item.name}</span>
-                                                    </button>
-                                                </li>
-                                            );
-                                        })}
-                                    </ul>
-                                </Dropdown>
-                            </div> */}
-                        </div>
                         <div className="mx-auto w-full max-w-[440px]">
                             <div className="flex justify-center mb-6">
                                 <img
@@ -213,23 +153,25 @@ const LoginBoxed = () => {
                                 />
                             </div>
 
-                            <div className="mb-10">
-                                <h1 className="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">Iniciar sesión</h1>
-                                <p className="text-base font-bold leading-normal text-white-dark">Ingrese su documento y contraseña para iniciar sesión</p>
+                            <div className="mb-7">
+                                <h1 className="mb-3 text-2xl font-bold !leading-snug dark:text-white">Nueva contraseña</h1>
+                                <p>Ingresa el código que te hemos enviado y confirma cuál es tu nueva contraseña.</p>
                             </div>
+
                             <form className="space-y-5 dark:text-white" onSubmit={submitForm}>
                                 <div>
-                                    <label htmlFor="cedula_envi">Documento</label>
+                                    <label htmlFor="codigo">codigo</label>
                                     <div className="relative text-white-dark">
                                         <input
-                                            id="cedula_envi"
-                                            name="cedula_envi"
+                                            id="codigo"
+                                            name="codigo"
                                             type="tel"
                                             placeholder="Ingresa tu documento"
                                             className="form-input ps-10 placeholder:text-white-dark"
                                             onChange={handleChange}
-                                            value={formData.cedula_envi}
+                                            value={formData.codigo}
                                             pattern="[0-9]*" // Solo permite dígitos
+                                            minLength={6}
                                             required
                                         />
                                         <span className="absolute start-4 top-1/2 -translate-y-1/2">
@@ -237,31 +179,68 @@ const LoginBoxed = () => {
                                         </span>{' '}
                                     </div>
                                 </div>
+
                                 <div>
-                                    <label htmlFor="password_envi">Contraseña</label>
+                                    <label htmlFor="nuevaContraseña">Nueva contraseña</label>
                                     <div className="relative text-white-dark">
                                         <input
-                                            id="password_envi"
-                                            name="password_envi"
+                                            id="nuevaContraseña"
+                                            name="nuevaContraseña"
                                             type="password"
-                                            placeholder="Introducir la contraseña"
+                                            placeholder="Ingresa tu nueva contraseña"
                                             className="form-input ps-10 placeholder:text-white-dark"
                                             onChange={handleChange}
-                                            value={formData.password_envi}
+                                            // pattern="[0-9]*"
+                                            minLength={4}
+                                            required
+                                        />
+                                        <span className="absolute start-4 top-1/2 -translate-y-1/2">
+                                            <IconLockDots fill={true} />
+                                        </span>{' '}
+                                    </div>
+                                </div>
+                                <div>
+                                    <label htmlFor="confirmarContraseña">Confirmar nueva contraseña</label>
+                                    <div className="relative text-white-dark">
+                                        <input
+                                            id="confirmarContraseña"
+                                            name="confirmarContraseña"
+                                            type="confirmarContraseña"
+                                            placeholder="Confirma la nueva contraseña"
+                                            className="form-input ps-10 placeholder:text-white-dark"
+                                            onChange={handleChange}
+                                            value={formData.confirmarContraseña}
+                                            minLength={4}
                                         />
                                         <span className="absolute start-4 top-1/2 -translate-y-1/2">
                                             <IconLockDots fill={true} />
                                         </span>
                                     </div>
                                 </div>
-                                <div>
-                                    {/* <label className="flex cursor-pointer items-center">
-                                        <input type="checkbox" className="form-checkbox bg-white dark:bg-black" />
-                                        <span className="text-white-dark">Subscribe to weekly newsletter</span>
-                                    </label> */}
-                                </div>
+
+                                {/* <div>
+                                    <label htmlFor="confirmarContraseña">Confirmar nueva contraseña</label>
+                                    <div className="relative text-white-dark">
+                                        <input
+                                            id="confirmarContraseña"
+                                            name="confirmarContraseña"
+                                            type="password"
+                                            placeholder="Confirmar la nueva contraseña"
+                                            className="form-input ps-10 placeholder:text-white-dark"
+                                            onChange={handleChange}
+                                            // value={formData.confirmarContraseña}
+                                            pattern="[0-9]*"
+                                            required
+                                        />
+                                        <span className="absolute start-4 top-1/2 -translate-y-1/2">
+                                            <IconLockDots fill={true} />
+                                        </span>
+                                    </div>
+                                </div> */}
+
+                                <p>Proceso de recuperacion de contraseña</p>
                                 <button type="submit" className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
-                                    Iniciar sesión
+                                    recuperar
                                 </button>
                             </form>
                             <div className="relative my-7 text-center md:mb-9">
@@ -350,12 +329,6 @@ const LoginBoxed = () => {
                                     Registrarme
                                 </Link>
                             </div>
-                            <div className="text-center dark:text-white">
-                                &nbsp;
-                                <Link to="/login/password" className="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
-                                    ¿Recuperar contraseña?
-                                </Link>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -364,4 +337,4 @@ const LoginBoxed = () => {
     );
 };
 
-export default LoginBoxed;
+export default NuevaContrasena;

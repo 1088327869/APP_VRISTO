@@ -1008,7 +1008,7 @@ const Header = () => {
                                         </NavLink>
                                     </li>
                                     <li>
-                                        <NavLink to="/auth/boxed-password-reset" target="_blank">
+                                        <NavLink to="/login/password" target="_blank">
                                             {t('recover_id_boxed')}
                                         </NavLink>
                                     </li>

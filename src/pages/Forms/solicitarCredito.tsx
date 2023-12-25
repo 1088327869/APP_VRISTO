@@ -368,6 +368,7 @@ const DateRangePicker = () => {
                                                     setInputEnd((prevValue: number) => Math.min(maximo, Math.max(minimo, prevValue)));
                                                 }}
                                                 max={maximo}
+                                                inputMode="numeric"
                                             />
                                         </div>
                                         <div className="flex sm:flex-row flex-col">
@@ -388,6 +389,7 @@ const DateRangePicker = () => {
                                                 onBlur={() => {
                                                     setInputEnd2((prevValue: number) => Math.min(plazo_maximo, Math.max(minimo_plazo, prevValue))); // Limitar el rango entre 2 y 12
                                                 }}
+                                                inputMode="numeric"
                                             />
                                         </div>
 
@@ -404,7 +406,7 @@ const DateRangePicker = () => {
                                                             checked={periodicidad === 'quincenal'}
                                                             onChange={handlePeriodicidadChange}
                                                         />
-                                                        <span className="text-white-dark">Quincenal</span>
+                                                        <span className="text-white-dark">Quincenal (Cuotas:{inputEnd2 * 2})</span>
                                                     </label>
                                                 </div>
                                                 <div className="mb-2">
@@ -417,7 +419,7 @@ const DateRangePicker = () => {
                                                             checked={periodicidad === 'mensual'}
                                                             onChange={handlePeriodicidadChange}
                                                         />
-                                                        <span className="text-white-dark">Mensual</span>
+                                                        <span className="text-white-dark">Mensual (Cuotas:{inputEnd2 * 1})</span>
                                                     </label>
                                                 </div>
                                             </div>
