@@ -17,6 +17,9 @@ import IconGoogle from '../../../components/Icon/IconGoogle';
 import IconPencil from '../../../components/Icon/IconPencil';
 import GridLoader from 'react-spinners/GridLoader';
 import '../../../assets/css/app.css';
+import axios from 'axios';
+import getApiUrl from '../../../../config';
+import Swal from 'sweetalert2';
 
 const RegisterCover = () => {
     const dispatch = useDispatch();
@@ -24,6 +27,7 @@ const RegisterCover = () => {
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
     const themeConfig = useSelector((state: IRootState) => state.themeConfig);
     const [isHovered, setIsHovered] = useState(false);
+    const apiURL = getApiUrl();
 
     const setLocale = (flag: string) => {
         setFlag(flag);
@@ -59,17 +63,30 @@ const RegisterCover = () => {
     const [loading, setLoading] = useState(false);
 
     // subir formulario
-    const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
+        try {
+            e.preventDefault();
 
-        // Marcamos el inicio del área de loading
-        setLoading(true);
+            // Marcamos el inicio del área de loading
+            setLoading(true);
 
-        // Guardar en localStorage
-        localStorage.setItem('formData', JSON.stringify(formData));
+            const response = await axios.post(`${apiURL}/api/codigo/msm`, {
+                documento: formData.documento,
+                telefono: formData.telefono,
+            });
 
-        // Redirigir a la URL /msm
-        navigate('/msm');
+            // Guardar en localStorage
+            localStorage.setItem('formData', JSON.stringify(formData));
+
+            // Redirigir a la URL /msm
+            navigate('/msm');
+        } catch (error) {
+            console.error('Error al enviar el formulario:', error);
+            // Manejar el error según tus necesidades, por ejemplo, mostrar un mensaje al usuario
+        } finally {
+            // Desactivamos el área de loading independientemente de si la solicitud tuvo éxito o falló
+            setLoading(false);
+        }
     };
 
     useEffect(() => {

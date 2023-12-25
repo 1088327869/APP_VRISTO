@@ -62,6 +62,11 @@ const ConfirmarMsm = () => {
     const setLocale = (flag: string) => {
         // Implementa tu lógica aquí si es necesario
     };
+    const [codigoValue, setCodigoValue] = useState('');
+    const handleCodigoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // Actualiza el estado con el nuevo valor del campo de entrada
+        setCodigoValue(e.target.value);
+    };
 
     const submitForm = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -71,6 +76,57 @@ const ConfirmarMsm = () => {
             setLoading(true);
             // Obtener los datos de localStorage
             const formDataFromLocalStorage = JSON.parse(localStorage.getItem('formData') || '{}');
+
+            Swal.fire({
+                title: 'Codigo incorrecto',
+                text: 'tu codigo es incorrecto, intenta nuevamente',
+                icon: 'error',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#dc3545', // Color rojo
+                timer: 7000,
+            });
+
+            const codigoResponse = await axios.post(`${apiURL}/api/consultar/programar`, {
+                userDocumento: parseInt(formDataFromLocalStorage.documento),
+                envioCodigo: parseInt(codigoValue),
+            });
+
+            if (codigoResponse.status === 200) {
+                const userData = codigoResponse.data.userData;
+                console.log('Código exitoso. Datos encontrados:', userData);
+
+                // Resto del código aquí si la respuesta es exitosa
+            } else if (codigoResponse.status === 404) {
+                // Código de respuesta 404
+                console.error('Error en la solicitud. Código no exitoso:', codigoResponse);
+
+                // Muestra una alerta al usuario indicando que el código es incorrecto
+                Swal.fire({
+                    title: 'Código incorrecto',
+                    text: 'Tu código es incorrecto. Verifica el código ingresado.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#dc3545', // Color rojo
+                    timer: 7000,
+                });
+            } else {
+                // Otro código de respuesta no es 200 ni 404
+                console.error('Error en la solicitud. Código no exitoso:', codigoResponse);
+
+                // Mostrar mensaje específico del servidor si está disponible
+                if (codigoResponse.data && codigoResponse.data.message) {
+                    console.error('Mensaje del servidor:', codigoResponse.data.message);
+                }
+
+                // Para otros errores, muestra un mensaje genérico
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Hubo un problema con el código ingresado.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#dc3545', // Color rojo
+                });
+            }
 
             const response = await fetch(`${apiURL}/api/user`, {
                 method: 'POST',
@@ -240,8 +296,11 @@ const ConfirmarMsm = () => {
                                             placeholder="Ingresa tu código"
                                             className="form-input ps-10 placeholder:text-white-dark"
                                             pattern="[0-9]{6,}" // Al menos 6 números
+                                            value={codigoValue}
+                                            onChange={handleCodigoChange} // Agrega esta línea para vincular el controlador de cambio
                                             required
                                         />
+
                                         <span className="absolute start-4 top-1/2 -translate-y-1/2">
                                             <IconLockDots fill={true} />
                                         </span>

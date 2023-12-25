@@ -71,6 +71,11 @@ const Index = () => {
                     userDocumento: userDocumento,
                 });
 
+                const amortizador = await axios.post(`${apiURL}/api/credit/amorti`, {
+                    userDocumento: userDocumento,
+                });
+
+                console.log('amortizador', amortizador);
                 // Filtrar el tipo "foto"
                 const fotoPerfilData = response4.data.find((item: any) => item.tipo === 'foto');
 

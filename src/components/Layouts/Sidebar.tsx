@@ -318,7 +318,7 @@ const Sidebar = () => {
                             </li>
 
                             {/* Desues de aca son menus que no se va a usar para el manejo de la aplicacion */}
-                            {/*
+
                             <li className="menu nav-item">
                                 <button type="button" className={`${currentMenu === 'component' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('component')}>
                                     <div className="flex items-center">
@@ -378,7 +378,7 @@ const Sidebar = () => {
                                     </ul>
                                 </AnimateHeight>
                             </li>
-                            
+
                             <li className="menu nav-item">
                                 <button type="button" className={`${currentMenu === 'element' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('element')}>
                                     <div className="flex items-center">
@@ -808,7 +808,7 @@ const Sidebar = () => {
                                         <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('documentation')}</span>
                                     </div>
                                 </NavLink>
-                            </li> */}
+                            </li>
                         </ul>
                     </PerfectScrollbar>
                 </div>
