@@ -4,10 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { IRootState } from '../../../store';
 import { setPageTitle, toggleRTL } from '../../../store/themeConfigSlice';
-import Dropdown from '../../../components/Dropdown';
-import i18next from 'i18next';
 import getApiUrl from '../../../../config';
-import IconCaretDown from '../../../components/Icon/IconCaretDown';
 import IconLockDots from '../../../components/Icon/IconLockDots';
 import IconInstagram from '../../../components/Icon/IconInstagram';
 import IconFacebookCircle from '../../../components/Icon/IconFacebookCircle';
@@ -16,11 +13,11 @@ import IconGoogle from '../../../components/Icon/IconGoogle';
 import IconPencil from '../../../components/Icon/IconPencil';
 import Swal from 'sweetalert2';
 import GridLoader from 'react-spinners/GridLoader';
-import '../../../assets/css/app.css';
+// import '../../../assets/css/app.css';
 
 const apiURL = getApiUrl();
 
-const RecuperarContrasena = () => {
+const recuper2 = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -282,4 +279,4 @@ const RecuperarContrasena = () => {
     );
 };
 
-export default RecuperarContrasena;
+export default recuper2;

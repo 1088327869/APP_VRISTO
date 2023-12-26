@@ -8,7 +8,7 @@ const useToken = () => {
     const token = localStorage.getItem('token');
 
     useEffect(() => {
-        const allowedUrls = ['/auth/boxed-signin', '/auth/register', '/msm', '/login/password', '/new/password'];
+        const allowedUrls = ['/auth/boxed-signin', '/auth/register', '/msm', '/recup/new/password', '/new/password'];
 
         // Check if the current URL is in the allowed list
         const isAllowedUrl = allowedUrls.some((allowedUrl) => window.location.pathname === allowedUrl);

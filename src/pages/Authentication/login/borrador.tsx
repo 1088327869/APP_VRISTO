@@ -4,10 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { IRootState } from '../../../store';
 import { setPageTitle, toggleRTL } from '../../../store/themeConfigSlice';
-import Dropdown from '../../../components/Dropdown';
-import i18next from 'i18next';
 import getApiUrl from '../../../../config';
-import IconCaretDown from '../../../components/Icon/IconCaretDown';
 import IconLockDots from '../../../components/Icon/IconLockDots';
 import IconInstagram from '../../../components/Icon/IconInstagram';
 import IconFacebookCircle from '../../../components/Icon/IconFacebookCircle';
@@ -16,11 +13,11 @@ import IconGoogle from '../../../components/Icon/IconGoogle';
 import IconPencil from '../../../components/Icon/IconPencil';
 import Swal from 'sweetalert2';
 import GridLoader from 'react-spinners/GridLoader';
-import '../../../assets/css/app.css';
+// import '../../../assets/css/app.css';
 
 const apiURL = getApiUrl();
 
-const LoginBoxed = () => {
+const recuper2 = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -32,7 +29,7 @@ const LoginBoxed = () => {
     const [flag, setFlag] = useState(themeConfig.locale);
     const [formData, setFormData] = useState({
         cedula_envi: '',
-        password_envi: '',
+        telefono: '',
     });
 
     useEffect(() => {
@@ -50,65 +47,34 @@ const LoginBoxed = () => {
         try {
             // Marcamos el inicio del área de loading
             setLoading(true);
-            const response = await axios.post(`${apiURL}/api/login`, formData);
 
+            const response = await axios.post(`${apiURL}/api/codigo/recuperar`, {
+                userDocumento: formData.cedula_envi,
+                celular: formData.telefono,
+            });
             if (response.status === 200) {
                 const data = response.data;
-                console.log('Login exitoso:', data);
+                console.log('Datos correctos:', data);
 
-                // Swal.fire({
-                //     title: 'Inicio de sesión exitoso',
-                //     text: '¡Bienvenido de nuevo!',
-                //     icon: 'success',
-                //     confirmButtonText: 'Aceptar',
-                //     confirmButtonColor: '#dc3545', // Color rojo
-                //     timer: 7000,
-                // });
+                Swal.fire({
+                    title: 'Validación exitosa',
+                    text: 'Te hemos enviado un código de 6 dígitos para cambiar la contraseña.',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#dc3545', // Color rojo
+                    timer: 7000,
+                });
 
-                localStorage.setItem('userData', JSON.stringify(formData.cedula_envi));
+                const hablame = await axios.post(`${apiURL}/api/codigo/password`, {
+                    userDocumento: formData.cedula_envi,
+                    celular: formData.telefono,
+                });
 
-                try {
-                    const consultarRegistroResponse = await axios.post(`${apiURL}/api/consultar/Registro`, { documento: formData.cedula_envi });
+                // Guardar en el localStorage
+                localStorage.setItem('documento', formData.cedula_envi);
+                navigate('/new/password');
 
-                    if (consultarRegistroResponse.status === 200) {
-                        // Marcamos el final del área de loading
-                        setLoading(false);
-
-                        Swal.fire({
-                            title: 'Inicio de sesión exitoso',
-                            text: '¡Bienvenido de nuevo!',
-                            icon: 'success',
-                            confirmButtonText: 'Aceptar',
-                            confirmButtonColor: '#dc3545', // Color rojo
-                            timer: 7000,
-                        });
-
-                        navigate('/');
-                    } else {
-                        console.log(consultarRegistroResponse.data.message);
-
-                        // Marcamos el final del área de loading
-                        setLoading(false);
-
-                        Swal.fire({
-                            title: 'Inicio de sesión exitoso',
-                            text: '¡Bienvenido de nuevo!',
-                            icon: 'success',
-                            confirmButtonText: 'Aceptar',
-                            confirmButtonColor: '#dc3545', // Color rojo
-                            timer: 7000,
-                        });
-
-                        navigate('/forms/wizards');
-                    }
-                } catch (error) {
-                    console.error('Error haciendo la consulta:', error);
-                    navigate('/forms/wizards');
-                }
-
-                if (data.token) {
-                    localStorage.setItem('token', data.token);
-                }
+                return;
             } else {
                 // Tratar el caso en que la respuesta no sea 200
                 console.error('Error en el inicio de sesión:', response.data);
@@ -116,9 +82,6 @@ const LoginBoxed = () => {
         } catch (error) {
             // Error en la solicitud
             console.error('Error en la solicitud:', error);
-
-            // Marcamos el final del área de loading
-            setLoading(false);
 
             Swal.fire({
                 title: 'Datos incorrectos',
@@ -128,6 +91,10 @@ const LoginBoxed = () => {
                 confirmButtonColor: '#dc3545', // Color rojo
                 timer: 7000,
             });
+
+            // Marcamos el final del área de loading
+            setLoading(false);
+            return;
         } finally {
             // Asegura que el loading se haya finalizado incluso en caso de error
             setLoading(false);
@@ -163,47 +130,6 @@ const LoginBoxed = () => {
                 <img src="/assets/images/auth/polygon-object.svg" alt="image" className="absolute bottom-0 end-[28%]" />
                 <div className="relative w-full max-w-[870px] rounded-md bg-[linear-gradient(45deg,#fff9f9_0%,rgba(255,255,255,0)_25%,rgba(255,255,255,0)_75%,_#fff9f9_100%)] p-2 dark:bg-[linear-gradient(52.22deg,#0E1726_0%,rgba(14,23,38,0)_18.66%,rgba(14,23,38,0)_51.04%,rgba(14,23,38,0)_80.07%,#0E1726_100%)]">
                     <div className="relative flex flex-col justify-center rounded-md bg-white/60 backdrop-blur-lg dark:bg-black/50 px-6 lg:min-h-[758px] py-20">
-                        <div className="absolute top-6 end-6">
-                            {/* <div className="dropdown">
-                                <Dropdown
-                                    offset={[0, 8]}
-                                    placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
-                                    btnClassName="flex items-center gap-2.5 rounded-lg border border-white-dark/30 bg-white px-2 py-1.5 text-white-dark hover:border-primary hover:text-primary dark:bg-black"
-                                    button={
-                                        <>
-                                            <div>
-                                                <img src={`/assets/images/flags/${flag.toUpperCase()}.svg`} alt="image" className="h-5 w-5 rounded-full object-cover" />
-                                            </div>
-                                            <div className="text-base font-bold uppercase">{flag}</div>
-                                            <span className="shrink-0">
-                                                <IconCaretDown />
-                                            </span>
-                                        </>
-                                    }
-                                >
-                                    <ul className="!px-2 text-dark dark:text-white-dark grid grid-cols-2 gap-2 font-semibold dark:text-white-light/90 w-[280px]">
-                                        {themeConfig.languageList.map((item: any) => {
-                                            return (
-                                                <li key={item.code}>
-                                                    <button
-                                                        type="button"
-                                                        className={`flex w-full hover:text-primary rounded-lg ${flag === item.code ? 'bg-primary/10 text-primary' : ''}`}
-                                                        onClick={() => {
-                                                            i18next.changeLanguage(item.code);
-                                                            // setFlag(item.code);
-                                                            setLocale(item.code);
-                                                        }}
-                                                    >
-                                                        <img src={`/assets/images/flags/${item.code.toUpperCase()}.svg`} alt="flag" className="w-5 h-5 object-cover rounded-full" />
-                                                        <span className="ltr:ml-3 rtl:mr-3">{item.name}</span>
-                                                    </button>
-                                                </li>
-                                            );
-                                        })}
-                                    </ul>
-                                </Dropdown>
-                            </div> */}
-                        </div>
                         <div className="mx-auto w-full max-w-[440px]">
                             <div className="flex justify-center mb-6">
                                 <img
@@ -213,9 +139,9 @@ const LoginBoxed = () => {
                                 />
                             </div>
 
-                            <div className="mb-10">
-                                <h1 className="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">Iniciar sesión</h1>
-                                <p className="text-base font-bold leading-normal text-white-dark">Ingrese su documento y contraseña para iniciar sesión</p>
+                            <div className="mb-7">
+                                <h1 className="mb-3 text-2xl font-bold !leading-snug dark:text-white">Restablecimiento de contraseña</h1>
+                                <p>Introduce tu correo electrónico para recuperar tu cuenta</p>
                             </div>
                             <form className="space-y-5 dark:text-white" onSubmit={submitForm}>
                                 <div>
@@ -238,30 +164,25 @@ const LoginBoxed = () => {
                                     </div>
                                 </div>
                                 <div>
-                                    <label htmlFor="password_envi">Contraseña</label>
+                                    <label htmlFor="telefono">Telefono</label>
                                     <div className="relative text-white-dark">
                                         <input
-                                            id="password_envi"
-                                            name="password_envi"
-                                            type="password"
+                                            id="telefono"
+                                            name="telefono"
+                                            type="telefono"
                                             placeholder="Introducir la contraseña"
                                             className="form-input ps-10 placeholder:text-white-dark"
                                             onChange={handleChange}
-                                            value={formData.password_envi}
+                                            value={formData.telefono}
                                         />
                                         <span className="absolute start-4 top-1/2 -translate-y-1/2">
                                             <IconLockDots fill={true} />
                                         </span>
                                     </div>
                                 </div>
-                                <div>
-                                    {/* <label className="flex cursor-pointer items-center">
-                                        <input type="checkbox" className="form-checkbox bg-white dark:bg-black" />
-                                        <span className="text-white-dark">Subscribe to weekly newsletter</span>
-                                    </label> */}
-                                </div>
+                                <p>Proceso de recuperacion de contraseña</p>
                                 <button type="submit" className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
-                                    Iniciar sesión
+                                    recuperar
                                 </button>
                             </form>
                             <div className="relative my-7 text-center md:mb-9">
@@ -345,17 +266,10 @@ const LoginBoxed = () => {
                                 </ul>
                             </div>
                             <div className="text-center dark:text-white">
-                                <div>
-                                    ¿No tienes una cuenta?&nbsp;
-                                    <Link to="/auth/register" className="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
-                                        Registrarme
-                                    </Link>
-                                </div>
-                                <div>
-                                    <Link to="/recup/new/password" className="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
-                                        ¿Recuperar contraseña?
-                                    </Link>
-                                </div>
+                                ¿No tienes una cuenta?&nbsp;
+                                <Link to="/auth/register" className="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
+                                    Registrarme
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -365,4 +279,4 @@ const LoginBoxed = () => {
     );
 };
 
-export default LoginBoxed;
+export default recuper2;

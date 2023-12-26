@@ -97,7 +97,7 @@ const RecuperarContrasena = () => {
             // Este bloque se ejecutará independientemente de si hubo un error o no
             setLoading(false); // Actualiza el estado de carga en tu componente
             console.log('Bloque finally ejecutado');
-            navigate('/login/password');
+            navigate('/recup/new/password');
             return;
         }
     };

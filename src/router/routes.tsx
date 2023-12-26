@@ -80,7 +80,7 @@ const ERROR500 = lazy(() => import('../pages/Pages/Error500'));
 const ERROR503 = lazy(() => import('../pages/Pages/Error503'));
 const Maintenence = lazy(() => import('../pages/Pages/Maintenence'));
 const LoginBoxed = lazy(() => import('../pages/Authentication/login/LoginBoxed'));
-const RecuperarContrasena = lazy(() => import('../pages/Authentication/login/RecuperarContraseña'));
+const RecuperarContrasena = lazy(() => import('../pages/Authentication/login/RecuperarContrasena'));
 const NuevaContrasena = lazy(() => import('../pages/Authentication/login/nuevacontrasena'));
 const RegisterBoxed = lazy(() => import('../pages/Authentication/RegisterBoxed'));
 const UnlockBoxed = lazy(() => import('../pages/Authentication/UnlockBox'));
@@ -462,8 +462,13 @@ const routes = [
         layout: 'blank',
     },
 
+    // {
+    //     path: '/login/password',
+    //     element: ,
+    //     layout: 'blank',
+    // },
     {
-        path: '/login/password',
+        path: '/recup/new/password',
         element: <RecuperarContrasena />,
         layout: 'blank',
     },
