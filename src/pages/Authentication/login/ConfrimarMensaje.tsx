@@ -185,7 +185,7 @@ const ConfirmarMsm = () => {
             });
             // Marcamos el final del área de loading
             setLoading(false);
-            navigate('/login/password');
+            navigate('/recup/new/password');
         }
 
         // console.error('Error en la solicitud:', error);

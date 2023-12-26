@@ -319,7 +319,7 @@ const Sidebar = () => {
 
                             {/* Desues de aca son menus que no se va a usar para el manejo de la aplicacion */}
 
-                            {/* <div>
+                            <div>
                                 <li className="menu nav-item">
                                     <button type="button" className={`${currentMenu === 'component' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('component')}>
                                         <div className="flex items-center">
@@ -338,7 +338,7 @@ const Sidebar = () => {
                                                 <NavLink to="/components/tabs">{t('tabs')}</NavLink>
                                             </li>
                                             <li>
-                                                <NavLink to="/components/accordions">{t('accordions')}</NavLink>
+                                                <NavLink to="/components/accordions">{t('Amortizador')}</NavLink>
                                             </li>
                                             <li>
                                                 <NavLink to="/components/modals">{t('modals')}</NavLink>
@@ -810,7 +810,7 @@ const Sidebar = () => {
                                         </div>
                                     </NavLink>
                                 </li>
-                            </div> */}
+                            </div>
                         </ul>
                     </PerfectScrollbar>
                 </div>
