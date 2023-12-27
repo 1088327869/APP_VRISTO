@@ -207,6 +207,8 @@ const PersonalInfoForm: React.FC<{ onNext: () => void }> = ({ onNext }) => {
     const options1: Option[] = [
         { value: 'FEMENINA', label: 'Femenina' },
         { value: 'MASCULINO', label: 'Masculino' },
+        { value: 'NO_BINARIO', label: 'No binario' },
+        { value: 'OTRO', label: 'Otro' },
     ];
 
     const options3: Option[] = [

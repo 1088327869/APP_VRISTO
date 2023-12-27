@@ -134,12 +134,6 @@ const Index = () => {
         fetchData();
     }, []);
 
-    useEffect(() => {
-        const fetchData = async () => {};
-
-        fetchData();
-    }, []);
-
     const isDark = useSelector((state: IRootState) => state.themeConfig.theme === 'dark' || state.themeConfig.isDarkMode);
 
     // const [apiData, setApiData] = useState<any>(null); // Puedes cambiar 'any' por el tipo adecuado para tus datos

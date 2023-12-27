@@ -102,7 +102,7 @@ const DateRangePicker = () => {
     // Obtén el valor numérico de TotalDisponible
     const totalDisponible = parseInt(formData.TotalDisponible, 10);
     const plazo = parseInt(formData.plazo, 10);
-    const minimo = totalDisponible >= 200000 ? 200000 : 0;
+    const minimo = totalDisponible >= 180000 ? 180000 : 0;
     const maximo = totalDisponible;
     const minimo_plazo = 2;
     const plazo_maximo = plazo;
@@ -208,39 +208,6 @@ const DateRangePicker = () => {
 
         // generar codigo de validacion
 
-        try {
-            // Realiza la solicitud a la API
-            const codigoResponse = await axios.post(`${apiURL}/api/codigo/credito`, {
-                userDocumento: userDocumento,
-            });
-            console.log('codigo generado', codigoResponse);
-            // Realiza acciones adicionales después de una respuesta exitosa si es necesario
-        } catch (error) {
-            // Maneja el error, muestra un mensaje o realiza acciones necesarias
-            console.error('Error al obtener datos de la API:', error);
-
-            // Verifica si el error es una respuesta 400 (Bad Request)
-            if (axios.isAxiosError(error)) {
-                // Muestra el mensaje de intento máximo permitido
-                Swal.fire({
-                    title: 'Intento máximo permitido',
-                    text: `Comunícate con nosotros a la línea de atención 📞 (604)4310350`,
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar',
-                    confirmButtonColor: '#dc3545', // Color rojo
-                    timer: 15000,
-                });
-                // Rompe la ejecución de la función aquí
-                return;
-            } else {
-                // Si el error no es una respuesta 400, maneja de alguna otra manera si es necesario
-                // ...
-            }
-        } finally {
-            // Este bloque se ejecutará independientemente de si hubo un error o no
-            setLoading(false); // Actualiza el estado de carga en tu componente
-        }
-
         const numeroDeCuotas = periodicidad === 'quincenal' ? inputEnd2 * 2 : inputEnd2;
 
         // acomodar el cuerpo del
@@ -257,11 +224,11 @@ const DateRangePicker = () => {
         };
 
         // Verifica si el monto del préstamo es menor que $200,000
-        if (dataToSave.prestamo <= 199990) {
+        if (dataToSave.prestamo <= 179999) {
             // Muestra notificación de error
             Swal.fire({
                 title: 'Monto insuficiente',
-                text: 'El monto mínimo requerido es de $200,000.',
+                text: 'El monto mínimo requerido es de $180,000.',
                 icon: 'error',
                 confirmButtonText: 'Aceptar',
                 confirmButtonColor: '#dc3545',
@@ -301,10 +268,46 @@ const DateRangePicker = () => {
                 confirmButtonColor: '#dc3545',
                 timer: 5000,
             });
+
             // Muestra un mensaje de error o realiza otras acciones si no se cumple la validación
             console.log('Error: Alguno de los campos no cumple con la condición.');
             // Marcamos el final del área de loading
             setLoading(false);
+            // Rompe la ejecución de la función aquí
+            return;
+        }
+
+        try {
+            // Realiza la solicitud a la API
+            const codigoResponse = await axios.post(`${apiURL}/api/codigo/credito`, {
+                userDocumento: userDocumento,
+            });
+            console.log('codigo generado', codigoResponse);
+            // Realiza acciones adicionales después de una respuesta exitosa si es necesario
+        } catch (error) {
+            // Maneja el error, muestra un mensaje o realiza acciones necesarias
+            console.error('Error al obtener datos de la API:', error);
+
+            // Verifica si el error es una respuesta 400 (Bad Request)
+            if (axios.isAxiosError(error)) {
+                // Muestra el mensaje de intento máximo permitido
+                Swal.fire({
+                    title: 'Intento máximo permitido',
+                    text: `Comunícate con nosotros a la línea de atención 📞 (604)4310350`,
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#dc3545', // Color rojo
+                    timer: 15000,
+                });
+                // Rompe la ejecución de la función aquí
+                return;
+            } else {
+                // Si el error no es una respuesta 400, maneja de alguna otra manera si es necesario
+                // ...
+            }
+        } finally {
+            // Este bloque se ejecutará independientemente de si hubo un error o no
+            setLoading(false); // Actualiza el estado de carga en tu componente
         }
 
         // Marcamos el final del área de loading
@@ -526,7 +529,7 @@ const DateRangePicker = () => {
                                     <div style={{ textAlign: 'center', margin: '20px 0', padding: '10px' }}>
                                         {/* <p style={{ marginBottom: '10px' }}>Préstamo: ${!isNaN(inputEnd) ? inputEnd.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '0'}</p> */}
                                         <Nouislider
-                                            range={{ min: 200001, max: maximo }}
+                                            range={{ min: 180001, max: maximo }}
                                             start={[inputStart, inputEnd]}
                                             step={1}
                                             connect={true}

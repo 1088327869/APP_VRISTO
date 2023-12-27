@@ -2,6 +2,7 @@ import { lazy } from 'react';
 
 const Index = lazy(() => import('../pages/Index'));
 const Formulario = lazy(() => import('../pages/Formulariot'));
+const Panel = lazy(() => import('../pages/panelPrincipal'));
 const Finalizar = lazy(() => import('../pages/Forms/RegistroCliente/registroFinalizado'));
 
 const Analytics = lazy(() => import('../pages/Analytics'));
@@ -131,6 +132,10 @@ const routes = [
     {
         path: '/formu',
         element: <Formulario />,
+    },
+    {
+        path: '/panel',
+        element: <Panel />,
     },
     {
         path: '/Registro/completado/procesado',
