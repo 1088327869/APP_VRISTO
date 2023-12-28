@@ -31,7 +31,10 @@ interface CreditoConAmortizacion {
     FechaPago: string;
     diasMora: number;
     pagoMinimo: number;
-    saldoUltimaCuota: String;
+    pagoEnMora: number;
+    sanciones: number;
+    saldo_ultimaFecha: number;
+    saldoUltimaCuota: number;
     pagoTotal: number;
 
     amortizacion: {
@@ -163,25 +166,35 @@ const Accordians = () => {
                                                 <p>{credito.periocidad}</p>
                                             </div>
                                             <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
-                                                <p>Valor Cuota:</p>
-                                                <p> $ {Number(credito.valor_cuota).toLocaleString()}</p>
-                                            </div>
-                                            <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
                                                 <p>Total Cuotas:</p>
                                                 <p>{credito.numero_cuotas}</p>
                                             </div>
                                             <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
+                                                <p>Valor Cuota:</p>
+                                                <p> $ {Number(credito.valor_cuota).toLocaleString()}</p>
+                                            </div>
+
+                                            <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
                                                 <p>Cuotas pendientes:</p>
                                                 <p>{credito.cuotasConSaldo}</p>
+                                            </div>
+                                            <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
+                                                <p>Sanciones:</p>
+                                                <p>{credito.sanciones}</p>
                                             </div>
                                             <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
                                                 <p>Dias en mora:</p>
                                                 <p>{credito.diasMora}</p>
                                             </div>
                                             <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
+                                                <p>Pago en mora:</p>
+                                                <p> $ {Number(credito.pagoEnMora).toLocaleString()}</p>
+                                            </div>
+                                            <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
                                                 <p>Pago minimo:</p>
                                                 <p> $ {Number(credito.pagoMinimo).toLocaleString()}</p>
                                             </div>
+
                                             <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
                                                 <p>Pago toal:</p>
                                                 <p> $ {Number(credito.pagoTotal).toLocaleString()}</p>

@@ -21,6 +21,60 @@ interface FormData {
     plazo: string;
 }
 
+interface CreditoConAmortizacion {
+    prestamo_ID: number;
+    documento: string;
+    tipoCredito: string;
+    valor_prestamo: string;
+    plazo: string;
+    numero_cuotas: string;
+    valor_cuota: string;
+    periocidad: string;
+    tasa: string;
+    fecha_Pago: string;
+    estado: string;
+    cartera: string;
+    fecha_registro: string;
+    cuotasConSaldo: number;
+    cuotasSinSaldo: number;
+    FechaPago: string;
+    diasMora: number;
+    pagoMinimo: number;
+    pagoEnMora: number;
+    sanciones: number;
+    saldo_ultimaFecha: number;
+    saldoUltimaCuota: number;
+    pagoTotal: number;
+
+    amortizacion: {
+        id: number;
+        prestamoID: number;
+        documento: string;
+        Numero_cuota: string;
+        capital: string;
+        interes: string;
+        aval: string;
+        sancion: number;
+        total_cuota: string;
+        saldo: string;
+        fecha_pago: string;
+    }[];
+}
+
+interface Amortizacion {
+    id: number;
+    prestamoID: number;
+    documento: string;
+    Numero_cuota: string;
+    capital: string;
+    interes: string;
+    aval: string;
+    sancion: number;
+    total_cuota: string;
+    saldo: string;
+    fecha_pago: string;
+}
+
 const DateRangePicker = () => {
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();

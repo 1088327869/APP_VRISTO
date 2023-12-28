@@ -22,6 +22,9 @@ import IconShoppingBag from '../components/Icon/IconShoppingBag';
 import axios from 'axios';
 import GridLoader from 'react-spinners/GridLoader';
 import '../assets/css/app.css';
+import IconCaretDown from '../components/Icon/IconCaretDown';
+import AnimateHeight from 'react-animate-height';
+import IconAirplay from '../components/Icon/IconAirplay';
 
 interface FormData {
     TotalCupo: string;
@@ -35,21 +38,78 @@ interface FormData {
     foto: string;
 }
 
+interface CreditoConAmortizacion {
+    prestamo_ID: number;
+    documento: string;
+    tipoCredito: string;
+    valor_prestamo: string;
+    plazo: string;
+    numero_cuotas: string;
+    valor_cuota: string;
+    periocidad: string;
+    tasa: string;
+    fecha_Pago: string;
+    estado: string;
+    cartera: string;
+    fecha_registro: string;
+    cuotasConSaldo: number;
+    cuotasSinSaldo: number;
+    FechaPago: string;
+    diasMora: number;
+    pagoMinimo: number;
+    pagoEnMora: number;
+    sanciones: number;
+    saldo_ultimaFecha: number;
+    saldoUltimaCuota: number;
+    pagoTotal: number;
+
+    amortizacion: {
+        id: number;
+        prestamoID: number;
+        documento: string;
+        Numero_cuota: string;
+        capital: string;
+        interes: string;
+        aval: string;
+        sancion: number;
+        total_cuota: string;
+        saldo: string;
+        fecha_pago: string;
+    }[];
+}
+
+interface Amortizacion {
+    id: number;
+    prestamoID: number;
+    documento: string;
+    Numero_cuota: string;
+    capital: string;
+    interes: string;
+    aval: string;
+    sancion: number;
+    total_cuota: string;
+    saldo: string;
+    fecha_pago: string;
+}
+
 const Index = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
 
+    const [creditos, setCreditos] = useState([]);
+
+    const [activeAccordion, setActiveAccordion] = useState<string | null>(null);
+    const storedUsdDate = localStorage.getItem('userData');
+    const userDocumento = storedUsdDate ? JSON.parse(storedUsdDate) : {};
+
+    // eliminar datos de localsotreg
+    localStorage.removeItem('DetalleCredit');
+
+    const apiURL = getApiUrl();
+
+    dispatch(setPageTitle('SOLUCREDITO'));
+
     useEffect(() => {
-        const storedUsdDate = localStorage.getItem('userData');
-        const userDocumento = storedUsdDate ? JSON.parse(storedUsdDate) : {};
-
-        // eliminar datos de localsotreg
-        localStorage.removeItem('DetalleCredit');
-
-        const apiURL = getApiUrl();
-
-        dispatch(setPageTitle('SOLUCREDITO'));
-
         const fetchData = async () => {
             try {
                 // Marcamos el inicio del área de loading
@@ -135,7 +195,27 @@ const Index = () => {
     }, []);
 
     useEffect(() => {
-        const fetchData = async () => {};
+        const fetchData = async () => {
+            try {
+                // Marcamos el inicio del área de loading
+                setLoading(true);
+
+                const respuestaAPICreditos = await axios.post(`${apiURL}/api/credit/cuotasPendiente`, {
+                    userDocumento: userDocumento,
+                });
+
+                const dataRespuestaAPICreditos = respuestaAPICreditos.data;
+                // console.log('respuesta API', dataRespuestaAPICreditos);
+                // Actualiza formData2 con los datos de la API
+                setCreditos(dataRespuestaAPICreditos);
+
+                setLoading(false);
+            } catch (error) {
+                console.error('Error al obtener datos de la API:', error);
+                // Marcamos el final del área de loading
+                setLoading(false);
+            }
+        };
 
         fetchData();
     }, []);
@@ -253,6 +333,26 @@ const Index = () => {
         },
     };
 
+    // mi credito
+    const amortizacionesCredito = (credito: CreditoConAmortizacion) =>
+        credito.amortizacion && credito.amortizacion.length
+            ? credito.amortizacion.map((item: Amortizacion, index: number) => {
+                  return <div key={item.id /* o cualquier propiedad única */}>{/* Resto del contenido de amortización */}</div>;
+              })
+            : [];
+
+    const dynamicData = [{ icon: <IconAirplay />, title: 'Collapsible Group Item #1', content: 'prestamo_ID' }];
+
+    const [isCodeVisible, setIsCodeVisible] = useState(false);
+
+    const toggleAccordion = (index: number) => {
+        setActiveAccordion((prev) => (prev === index.toString() ? null : index.toString()));
+    };
+
+    const toggleCode = () => {
+        setIsCodeVisible((prev) => !prev);
+    };
+
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
     return (
         <div>
@@ -355,52 +455,85 @@ const Index = () => {
                             </div>
                         </div>
                         {/* Mis Creditos */}
-                        <div className="panel h-full lg:h-auto">
-                            <div className="mb-5">
-                                <h5 className="font-semibold text-lg dark:text-white-light">Mis Créditos</h5>
+                        <div className="panel">
+                            <div className="flex items-center justify-between mb-5">
+                                <h5 className="font-semibold text-lg dark:text-white-light">Creditos</h5>
                             </div>
-                            <div className="space-y-4">
-                                {/* <div className="border border-[#ebedf2] rounded dark:bg-[#1b2e4b] dark:border-0">
-                                <div className="flex items-center justify-between p-4 py-2">
-                                    <div className="grid place-content-center w-9 h-9 rounded-md bg-secondary-light dark:bg-secondary text-secondary dark:text-secondary-light">
-                                        <IconShoppingBag />
-                                    </div>
-                                    <div className="ltr:ml-4 rtl:mr-4 flex items-start justify-between flex-auto font-semibold">
-                                        <h6 className="text-white-dark text-[13px] dark:text-white-dark">
-                                            Income
-                                            <span className="block text-base text-[#515365] dark:text-white-light">$92,600</span>
-                                        </h6>
-                                        <p className="ltr:ml-auto rtl:mr-auto text-secondary">90%</p>
-                                    </div>
-                                </div>
-                            </div> */}
-                                {/* <div className="border border-[#ebedf2] rounded dark:bg-[#1b2e4b] dark:border-0">
-                                <div className="flex items-center justify-between p-4 py-2">
-                                    <div className="grid place-content-center w-9 h-9 rounded-md bg-info-light dark:bg-info text-info dark:text-info-light">
-                                        <IconTag />
-                                    </div>
-                                    <div className="ltr:ml-4 rtl:mr-4 flex items-start justify-between flex-auto font-semibold">
-                                        <h6 className="text-white-dark text-[13px] dark:text-white-dark">
-                                            Profit
-                                            <span className="block text-base text-[#515365] dark:text-white-light">$37,515</span>
-                                        </h6>
-                                        <p className="ltr:ml-auto rtl:mr-auto text-info">65%</p>
-                                    </div>
-                                </div>
-                            </div> */}
-                                <div className="border border-[#ebedf2] rounded dark:bg-[#1b2e4b] dark:border-0">
-                                    <div className="flex items-center justify-between p-4 py-2">
-                                        <div className="grid place-content-center w-9 h-9 rounded-md bg-warning-light dark:bg-warning text-warning dark:text-warning-light">
-                                            <IconCreditCard />
-                                        </div>
-                                        <div className="ltr:ml-4 rtl:mr-4 flex items-start justify-between flex-auto font-semibold">
-                                            <h6 className="text-white-dark text-[13px] dark:text-white-dark">
-                                                Credito express
-                                                <span className="block text-base text-[#515365] dark:text-white-light">$0</span>
-                                            </h6>
-                                            <p className="ltr:ml-auto rtl:mr-auto text-warning">100%</p>
-                                        </div>
-                                    </div>
+
+                            <div className="mb-5">
+                                <div className="space-y-2 font-semibold">
+                                    {creditos.map((credito: CreditoConAmortizacion, indiceCredito) => {
+                                        const isActiveAccordion = activeAccordion === indiceCredito.toString();
+
+                                        return (
+                                            <div key={credito.prestamo_ID} className={`border border-[#d3d3d3] rounded dark:border-[#1b2e4b]`}>
+                                                <button
+                                                    type="button"
+                                                    className={`p-4 w-full flex items-center text-white-dark dark:bg-[#1b2e4b] ${isActiveAccordion ? '!text-primary' : ''}`}
+                                                    onClick={() => toggleAccordion(indiceCredito)}
+                                                >
+                                                    <IconCreditCard />
+                                                    {credito.tipoCredito}
+                                                    {credito.prestamo_ID !== undefined ? ' ****' + credito.prestamo_ID.toString().slice(-4).padStart(4, '0') : ''}
+
+                                                    <div className={`ltr:ml-auto rtl:mr-auto ${isActiveAccordion ? 'rotate-180' : ''}`}>
+                                                        <IconCaretDown />
+                                                    </div>
+                                                </button>
+                                                <div>
+                                                    <AnimateHeight duration={300} height={isActiveAccordion ? 'auto' : 0}>
+                                                        <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
+                                                            <p>Valor inicial:</p>
+                                                            <p> $ {Number(credito.valor_prestamo).toLocaleString()}</p>
+                                                        </div>
+                                                        <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
+                                                            <p>Periodicidad de Pago:</p>
+                                                            <p>{credito.periocidad}</p>
+                                                        </div>
+                                                        <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
+                                                            <p>Total Cuotas:</p>
+                                                            <p>{credito.numero_cuotas}</p>
+                                                        </div>
+                                                        <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
+                                                            <p>Valor Cuota:</p>
+                                                            <p> $ {Number(credito.valor_cuota).toLocaleString()}</p>
+                                                        </div>
+
+                                                        <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
+                                                            <p>Cuotas pendientes:</p>
+                                                            <p>{credito.cuotasConSaldo}</p>
+                                                        </div>
+                                                        <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
+                                                            <p>Sanciones:</p>
+                                                            <p> $ {Number(credito.sanciones).toLocaleString()}</p>
+                                                        </div>
+                                                        <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
+                                                            <p>Dias en mora:</p>
+                                                            <p>{credito.diasMora}</p>
+                                                        </div>
+                                                        <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
+                                                            <p>Pago en mora:</p>
+                                                            <p> $ {Number(credito.pagoEnMora).toLocaleString()}</p>
+                                                        </div>
+                                                        <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
+                                                            <p>Pago minimo:</p>
+                                                            <p> $ {Number(credito.pagoMinimo).toLocaleString()}</p>
+                                                        </div>
+
+                                                        <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
+                                                            <p>Pago toal:</p>
+                                                            <p> $ {Number(credito.pagoTotal).toLocaleString()}</p>
+                                                        </div>
+                                                        <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
+                                                            <p>Fecha pago:</p>
+                                                            <p>{credito.FechaPago}</p>
+                                                        </div>
+                                                        {amortizacionesCredito(credito)}
+                                                    </AnimateHeight>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         </div>

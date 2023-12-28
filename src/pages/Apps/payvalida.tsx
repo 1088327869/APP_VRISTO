@@ -11,7 +11,64 @@ import getApiUrl from '../../../config';
 import axios from 'axios';
 import { setPageTitle } from '../../store/themeConfigSlice';
 import '../../assets/css/app.css'; //  css de login
+import AnimateHeight from 'react-animate-height';
+import IconCreditCard from '../../components/Icon/IconCreditCard';
 
+interface CreditoConAmortizacion {
+    prestamo_ID: number;
+    documento: string;
+    tipoCredito: string;
+    valor_prestamo: string;
+    plazo: string;
+    numero_cuotas: string;
+    valor_cuota: string;
+    periocidad: string;
+    tasa: string;
+    fecha_Pago: string;
+    estado: string;
+    cartera: string;
+    fecha_registro: string;
+    cuotasConSaldo: number;
+    cuotasSinSaldo: number;
+    FechaPago: string;
+    diasMora: number;
+    pagoMinimo: number;
+    pagoEnMora: number;
+    sanciones: number;
+    saldo_ultimaFecha: number;
+    saldoUltimaCuota: number;
+    pagoTotal: number;
+
+    amortizacion: {
+        id: number;
+        prestamoID: number;
+        documento: string;
+        Numero_cuota: string;
+        capital: string;
+        interes: string;
+        aval: string;
+        sancion: number;
+        total_cuota: string;
+        saldo: string;
+        fecha_pago: string;
+    }[];
+}
+
+interface Amortizacion {
+    id: number;
+    prestamoID: number;
+    documento: string;
+    Numero_cuota: string;
+    capital: string;
+    interes: string;
+    aval: string;
+    sancion: number;
+    total_cuota: string;
+    saldo: string;
+    fecha_pago: string;
+}
+
+// TODO borrarlo  pero validar que no rompa
 interface FormData {
     TotalCupo: string;
     TotalDisponible: string;
@@ -26,9 +83,17 @@ interface FormData {
     valor_seleccionado: string;
 }
 
-const FormularioG = () => {
+const MediosDePago = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
+    const storedUsdDate = localStorage.getItem('userData');
+    const userDocumento = storedUsdDate ? JSON.parse(storedUsdDate) : {};
+    const [creditos, setCreditos] = useState([] as CreditoConAmortizacion[]);
+    dispatch(setPageTitle('PAGOS'));
+
+    const apiURL = getApiUrl();
+
+    const [activeAccordion, setActiveAccordion] = useState<string | null>(null);
 
     const [formData, setFormData] = useState<FormData>({
         TotalCupo: '0',
@@ -45,13 +110,7 @@ const FormularioG = () => {
     });
 
     useEffect(() => {
-        const storedUsdDate = localStorage.getItem('userData');
-        const userDocumento = storedUsdDate ? JSON.parse(storedUsdDate) : {};
-
-        const apiURL = getApiUrl();
         const payvalida = 'https://pago.solucredito.com.co';
-
-        dispatch(setPageTitle('PAGOS'));
 
         const fetchData = async () => {
             try {
@@ -99,25 +158,41 @@ const FormularioG = () => {
         fetchData();
     }, [dispatch]);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Marcamos el inicio del área de loading
+                setLoading(true);
+
+                const respuestaAPICreditos = await axios.post(`${apiURL}/api/credit/cuotasPendiente`, {
+                    userDocumento: userDocumento,
+                });
+
+                const dataRespuestaAPICreditos = respuestaAPICreditos.data;
+                console.log('respuesta API', dataRespuestaAPICreditos);
+                // Actualiza formData2 con los datos de la API
+                setCreditos(dataRespuestaAPICreditos);
+
+                setLoading(false);
+            } catch (error) {
+                console.error('Error al obtener datos de la API:', error);
+                // Marcamos el final del área de loading
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
     // const [apiData, setApiData] = useState<any>(null); // Puedes cambiar 'any' por el tipo adecuado para tus datos
     // Define el estado del formulario
 
-    const [selectedPaymentOption, setSelectedPaymentOption] = useState('pago_minimo');
+    const [selectedCreditOption, setSelectedCreditOption] = useState(0);
+    const [opcionPago, setOpcionPago] = useState('pago_minimo');
 
-    const handlePaymentOptionChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const selectedOption = event.target.value;
-
-        // Actualizar el estado del formulario
-        setFormData((prevData) => ({
-            ...prevData,
-            valor_seleccionado: selectedOption,
-        }));
-
-        // Guardar el valor seleccionado en localStorage
-        localStorage.setItem('selectedPaymentOption', selectedOption);
-
+    const handleCreditOptionChange = (selectedValue: number) => {
         // Actualizar el estado del tipo de pago seleccionado
-        setSelectedPaymentOption(selectedOption);
+        setSelectedCreditOption(selectedValue);
     };
 
     const handlePagarClick = async () => {
@@ -126,35 +201,35 @@ const FormularioG = () => {
             // Marcamos el inicio del área de loading
             setLoading(true);
 
-            let selectedPaymentOption = '1200';
+            let valorAPagar = 0;
+            const creditoActual = creditos[selectedCreditOption];
 
-            switch (formData.valor_seleccionado) {
+            switch (opcionPago) {
                 case 'pago_minimo':
-                    selectedPaymentOption = formData.pago_minimo;
+                    valorAPagar = creditoActual.pagoMinimo;
                     break;
                 case 'Pago_total':
-                    selectedPaymentOption = formData.Pago_total;
+                    valorAPagar = creditoActual.pagoTotal;
                     break;
                 case 'pago_mora':
-                    selectedPaymentOption = formData.pago_mora;
+                    valorAPagar = creditoActual.pagoEnMora;
                     break;
                 default:
                     // Puedes manejar otro caso por defecto o lanzar un error si es necesario
                     break;
             }
 
-            // Establecer el estado del tipo de pago seleccionado
-            setSelectedPaymentOption(selectedPaymentOption);
-
-            console.log('valor obtenido', selectedPaymentOption);
-            const responseLink = await axios.post(`https://pago.solucredito.com.co/generarLink`, {
-                //      const responseLink = await axios.post(`http://localhost:3001/generarLink`, {
+            console.log('valor obtenido', valorAPagar);
+            const hoy = new Date();
+            // const responseLink = await axios.post(`https://pago.solucredito.com.co/generarLink`, {
+            const responseLink = await axios.post(`http://localhost:3001/generarLink`, {
                 nombreCliente: formData.nombre,
                 email: formData.email,
-                amount: selectedPaymentOption, // pendiente porseleccionar el valor a pagar
+                amount: valorAPagar, // pendiente porseleccionar el valor a pagar
                 identification: formData.documento,
                 identificationType: 'CC',
                 metodoPago: selectedPhysicalPayment,
+                ordenId: `${creditoActual.prestamo_ID}T${hoy.getMonth() + 1}${hoy.getDate()}${Math.floor(Math.random() * 1000)}`,
             });
 
             // Obtén el valor de responseLink.data
@@ -178,10 +253,21 @@ const FormularioG = () => {
         setLoading(false);
     };
 
+    const amortizacionesCredito = (credito: CreditoConAmortizacion) =>
+        credito.amortizacion && credito.amortizacion.length
+            ? credito.amortizacion.map((item: Amortizacion, index: number) => {
+                  return <div key={item.id /* o cualquier propiedad única */}>{/* Resto del contenido de amortización */}</div>;
+              })
+            : [];
+
     const [selectedPhysicalPayment, setSelectedPhysicalPayment] = useState('pse');
 
     const handlePaymentChange = (event: { target: { value: React.SetStateAction<string> } }) => {
         setSelectedPhysicalPayment(event.target.value);
+    };
+
+    const toggleAccordion = (index: number) => {
+        setActiveAccordion((prev) => (prev === index.toString() ? null : index.toString()));
     };
 
     return (
@@ -218,54 +304,53 @@ const FormularioG = () => {
                                 {/* Informacion de pago */}
                                 <div className="panel" id="horizontal_form">
                                     <div className="flex items-center justify-between mb-5">
-                                        <h5 className="font-semibold text-lg dark:text-white-light">Informacion de pago</h5>
+                                        <h5 className="font-semibold text-lg dark:text-white-light">Información de pago</h5>
                                     </div>
                                     <div className="mb-5">
                                         <form className="space-y-5">
-                                            {/* ... (resto del código) */}
                                             <div className="flex sm:flex-row flex-col">
                                                 <label className="sm:w-1/4 sm:ltr:mr-2 rtl:ml-2">Seleccione crédito</label>
-
                                                 <div className="flex-1">
-                                                    {/* ... (resto del código) */}
-                                                    <div className="mb-2">
-                                                        <select id="horizontalEmail" className="form-input flex-1">
+                                                    <div className="space-y-2 font-semibold">
+                                                        <select
+                                                            id="horizontalEmail"
+                                                            className="form-select flex-1"
+                                                            onChange={(e) => {
+                                                                const selectedIndex = parseInt(e.target.value, 10);
+                                                                toggleAccordion(selectedIndex);
+                                                                setFormData((prevData) => ({
+                                                                    ...prevData,
+                                                                    valor_seleccionado: '', // Reiniciar el valor seleccionado al cambiar el crédito
+                                                                }));
+                                                                handleCreditOptionChange(selectedIndex);
+                                                            }}
+                                                        >
                                                             <option value="">Seleccione un crédito</option>
-                                                            <option value="Crédito**2525">Crédito **2525</option>
-                                                            <option value="Crédito**85968">Crédito **85968</option>
+                                                            {creditos.map((credito: CreditoConAmortizacion, index: number) => (
+                                                                <option key={index} value={index}>
+                                                                    {credito.tipoCredito}
+                                                                    {credito.prestamo_ID !== undefined ? ' ****' + credito.prestamo_ID.toString().slice(-4).padStart(4, '0') : ''}
+                                                                </option>
+                                                            ))}
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div className="flex sm:flex-row flex-col">
                                                 <label className="sm:w-1/4 sm:ltr:mr-2 rtl:ml-2">Tipo de pago</label>
-
                                                 <div className="flex-1">
-                                                    {/* ... (resto del código) */}
                                                     <div className="mb-2">
                                                         <label className="inline-flex mt-1 cursor-pointer">
                                                             <input
                                                                 type="radio"
                                                                 name="segements"
                                                                 className="form-radio"
-                                                                checked={selectedPaymentOption === 'Pago_total'}
-                                                                onChange={() => setSelectedPaymentOption('Pago_total')}
+                                                                checked={opcionPago === 'Pago_total'}
+                                                                onChange={() => setOpcionPago('Pago_total')}
                                                             />
-                                                            <span className="text-white-dark">Pago total {formData.Pago_total}</span>
-                                                        </label>
-                                                    </div>
-
-                                                    <div className="mb-2">
-                                                        <label className="inline-flex mt-1 cursor-pointer">
-                                                            <input
-                                                                type="radio"
-                                                                name="segements"
-                                                                className="form-radio"
-                                                                checked={selectedPaymentOption === 'pago_minimo'}
-                                                                onChange={() => setSelectedPaymentOption('pago_minimo')}
-                                                            />
-                                                            <span className="text-white-dark">Pago Mínimo {formData.pago_minimo}</span>
+                                                            <span className="text-white-dark">
+                                                                Pago total {creditos.length > 0 ? `$ ${Number(creditos[selectedCreditOption].pagoTotal).toLocaleString()}` : ''}
+                                                            </span>
                                                         </label>
                                                     </div>
                                                     <div className="mb-2">
@@ -274,15 +359,32 @@ const FormularioG = () => {
                                                                 type="radio"
                                                                 name="segements"
                                                                 className="form-radio"
-                                                                checked={selectedPaymentOption === 'pago_mora'}
-                                                                onChange={() => setSelectedPaymentOption('pago_mora')}
+                                                                checked={opcionPago === 'pago_minimo'}
+                                                                onChange={() => setOpcionPago('pago_minimo')}
                                                             />
-                                                            <span className="text-white-dark">Pago en mora {formData.pago_mora}</span>
+                                                            <span className="text-white-dark">
+                                                                Pago Mínimo {creditos.length > 0 ? `$ ${Number(creditos[selectedCreditOption].pagoMinimo).toLocaleString()}` : ''}
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                    <div className="mb-2">
+                                                        <label className="inline-flex mt-1 cursor-pointer">
+                                                            <input
+                                                                type="radio"
+                                                                name="segements"
+                                                                className="form-radio"
+                                                                checked={opcionPago === 'pago_mora'}
+                                                                onChange={() => setOpcionPago('pago_mora')}
+                                                            />
+                                                            <span className="text-white-dark">
+                                                                Pago en mora {creditos.length > 0 ? `$ ${Number(creditos[selectedCreditOption].pagoEnMora).toLocaleString()}` : ''}
+                                                            </span>
                                                         </label>
                                                     </div>
                                                 </div>
                                             </div>
                                         </form>
+                                        ;
                                     </div>
                                 </div>
 
@@ -387,4 +489,4 @@ const FormularioG = () => {
     );
 };
 
-export default FormularioG;
+export default MediosDePago;
