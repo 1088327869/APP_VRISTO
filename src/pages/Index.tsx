@@ -521,7 +521,7 @@ const Index = () => {
                                                         </div>
 
                                                         <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
-                                                            <p>Pago toal:</p>
+                                                            <p>Pago total:</p>
                                                             <p> $ {Number(credito.pagoTotal).toLocaleString()}</p>
                                                         </div>
                                                         <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">

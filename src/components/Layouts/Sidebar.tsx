@@ -319,7 +319,7 @@ const Sidebar = () => {
 
                             {/* Desues de aca son menus que no se va a usar para el manejo de la aplicacion */}
 
-                            <div>
+                            {/* <div>
                                 <li className="menu nav-item">
                                     <button type="button" className={`${currentMenu === 'component' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('component')}>
                                         <div className="flex items-center">
@@ -810,7 +810,7 @@ const Sidebar = () => {
                                         </div>
                                     </NavLink>
                                 </li>
-                            </div>
+                            </div> */}
                         </ul>
                     </PerfectScrollbar>
                 </div>

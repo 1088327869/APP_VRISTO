@@ -13,6 +13,7 @@ import { setPageTitle } from '../../store/themeConfigSlice';
 import '../../assets/css/app.css'; //  css de login
 import AnimateHeight from 'react-animate-height';
 import IconCreditCard from '../../components/Icon/IconCreditCard';
+import Swal from 'sweetalert2';
 
 interface CreditoConAmortizacion {
     prestamo_ID: number;
@@ -110,8 +111,6 @@ const MediosDePago = () => {
     });
 
     useEffect(() => {
-        const payvalida = 'https://pago.solucredito.com.co';
-
         const fetchData = async () => {
             try {
                 // Marcamos el inicio del área de loading
@@ -219,10 +218,25 @@ const MediosDePago = () => {
                     break;
             }
 
+            if (valorAPagar < 1000) {
+                Swal.fire({
+                    title: 'Monto insuficiente',
+                    text: 'El monto mínimo requerido es de $1,000.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#dc3545',
+                    timer: 5000,
+                });
+                // rompe la navegacion
+                // Marcamos el final del área de loading
+                setLoading(false);
+                return;
+            }
+
             console.log('valor obtenido', valorAPagar);
             const hoy = new Date();
-            // const responseLink = await axios.post(`https://pago.solucredito.com.co/generarLink`, {
-            const responseLink = await axios.post(`http://localhost:3001/generarLink`, {
+            const responseLink = await axios.post(`https://pago.solucredito.com.co/generarLink`, {
+                // const responseLink = await axios.post(`http://localhost:3001/generarLink`, {
                 nombreCliente: formData.nombre,
                 email: formData.email,
                 amount: valorAPagar, // pendiente porseleccionar el valor a pagar
