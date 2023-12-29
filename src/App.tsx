@@ -4,7 +4,7 @@ import { IRootState } from './store';
 import { toggleRTL, toggleTheme, toggleLocale, toggleMenu, toggleLayout, toggleAnimation, toggleNavbar, toggleSemidark } from './store/themeConfigSlice';
 import store from './store';
 import useToken from './pages/Authentication/login/token';
-//traer informacion de localstoreg
+//traer informacion de localstoreg../cambio git pc oficina.
 
 function App({ children }: PropsWithChildren) {
     const themeConfig = useSelector((state: IRootState) => state.themeConfig);
