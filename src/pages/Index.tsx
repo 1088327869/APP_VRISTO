@@ -464,6 +464,13 @@ const Index = () => {
                                 <div className="space-y-2 font-semibold">
                                     {creditos.map((credito: CreditoConAmortizacion, indiceCredito) => {
                                         const isActiveAccordion = activeAccordion === indiceCredito.toString();
+                                        //limitar si tiene estos estados
+                                        const isValidState = credito.estado === 'EN PROCESO' || credito.estado === 'APROBADO' || credito.estado === '';
+
+                                        if (!isValidState) {
+                                            // Skip rendering this credit card if it's not in a valid state
+                                            return null;
+                                        }
 
                                         return (
                                             <div key={credito.prestamo_ID} className={`border border-[#d3d3d3] rounded dark:border-[#1b2e4b]`}>
@@ -498,7 +505,6 @@ const Index = () => {
                                                             <p>Valor Cuota:</p>
                                                             <p> $ {Number(credito.valor_cuota).toLocaleString()}</p>
                                                         </div>
-
                                                         <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
                                                             <p>Cuotas pendientes:</p>
                                                             <p>{credito.cuotasConSaldo}</p>
@@ -519,7 +525,6 @@ const Index = () => {
                                                             <p>Pago minimo:</p>
                                                             <p> $ {Number(credito.pagoMinimo).toLocaleString()}</p>
                                                         </div>
-
                                                         <div className="flex justify-between space-y-2 p-4 text-white-dark text-[13px] border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
                                                             <p>Pago total:</p>
                                                             <p> $ {Number(credito.pagoTotal).toLocaleString()}</p>
@@ -528,6 +533,12 @@ const Index = () => {
                                                             <p>Fecha pago:</p>
                                                             <p>{credito.FechaPago}</p>
                                                         </div>
+                                                        <button className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
+                                                            <Link to="/apps/pay" style={{ display: 'block', width: '100%', height: '100%' }}>
+                                                                PAGAR
+                                                            </Link>
+                                                        </button>
+
                                                         {amortizacionesCredito(credito)}
                                                     </AnimateHeight>
                                                 </div>

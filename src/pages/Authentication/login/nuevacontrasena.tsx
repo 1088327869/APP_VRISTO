@@ -166,7 +166,7 @@ const NuevaContrasena = () => {
                                             id="codigo"
                                             name="codigo"
                                             type="tel"
-                                            placeholder="Ingresa tu documento"
+                                            placeholder="Ingresa su codigo"
                                             className="form-input ps-10 placeholder:text-white-dark"
                                             onChange={handleChange}
                                             value={formData.codigo}

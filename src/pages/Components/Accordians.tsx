@@ -203,6 +203,7 @@ const Accordians = () => {
                                                 <p>Fecha pago:</p>
                                                 <p>{credito.FechaPago}</p>
                                             </div>
+
                                             {amortizacionesCredito(credito)}
                                         </AnimateHeight>
                                     </div>

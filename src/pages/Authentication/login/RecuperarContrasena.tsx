@@ -170,7 +170,7 @@ const recuper2 = () => {
                                             id="telefono"
                                             name="telefono"
                                             type="telefono"
-                                            placeholder="Introducir la contraseña"
+                                            placeholder="Introducir su teléfono"
                                             className="form-input ps-10 placeholder:text-white-dark"
                                             onChange={handleChange}
                                             pattern="[0-9]*" // Solo permite dígitos

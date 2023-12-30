@@ -104,9 +104,9 @@ const MediosDePago = () => {
         ciudad: '',
         email: '',
         telefono: 0,
-        Pago_total: '1000',
-        pago_minimo: '2000',
-        pago_mora: '3000',
+        Pago_total: '',
+        pago_minimo: '',
+        pago_mora: '',
         valor_seleccionado: '',
     });
 
@@ -340,12 +340,21 @@ const MediosDePago = () => {
                                                             }}
                                                         >
                                                             <option value="">Seleccione un crédito</option>
-                                                            {creditos.map((credito: CreditoConAmortizacion, index: number) => (
-                                                                <option key={index} value={index}>
-                                                                    {credito.tipoCredito}
-                                                                    {credito.prestamo_ID !== undefined ? ' ****' + credito.prestamo_ID.toString().slice(-4).padStart(4, '0') : ''}
-                                                                </option>
-                                                            ))}
+                                                            {creditos.map((credito: CreditoConAmortizacion, index: number) => {
+                                                                // Add a condition to check if the credit is in a valid state
+                                                                const isValidState = credito.estado === 'EN PROCESO' || credito.estado === 'APROBADO' || credito.estado === '';
+
+                                                                if (!isValidState) {
+                                                                    return null; // Skip rendering this credit option if it's not in a valid state
+                                                                }
+
+                                                                return (
+                                                                    <option key={index} value={index}>
+                                                                        {credito.tipoCredito}
+                                                                        {credito.prestamo_ID !== undefined ? ' ****' + credito.prestamo_ID.toString().slice(-4).padStart(4, '0') : ''}
+                                                                    </option>
+                                                                );
+                                                            })}
                                                         </select>
                                                     </div>
                                                 </div>

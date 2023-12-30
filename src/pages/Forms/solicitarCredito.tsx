@@ -255,13 +255,92 @@ const DateRangePicker = () => {
     };
 
     const handleAceptarClick = async () => {
-        // Obtén la información que deseas guardar
-
         // Marcamos el inicio del área de loading
         setLoading(true);
+        // llamar a la api, para validar si  tiene mas de 1 credito
 
-        // generar codigo de validacion
+        try {
+            // Realiza la solicitud a la API
+            const validarCreditosEn_proceso = await axios.post(`${apiURL}/api/validar/credito`, {
+                userDocumento: userDocumento,
+            });
+            // realizar consulta de API suma total de sanciones
+            const sumaSanciones = await axios.post(`${apiURL}/api/validar/credito/mora`, {
+                userDocumento: userDocumento,
+            });
+            const { totalSanciones } = sumaSanciones.data;
 
+            if (totalSanciones >= 1) {
+                // Muestra el mensaje de intento máximo permitido para estado_aprobado
+                Swal.fire({
+                    title: 'Crédito en mora',
+                    text: 'Tienes pagos pendientes, no puedes solicitar tu crédito si tienes saldo en mora.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#dc3545',
+                    timer: 15000,
+                });
+                // Rompe la ejecución de la función aquí
+                return;
+            }
+
+            // Verifica el estado_aprobado y estado_enproceso
+            const { estado_aprobado, estado_enproceso } = validarCreditosEn_proceso.data;
+
+            if (estado_aprobado >= 2) {
+                // Muestra el mensaje de intento máximo permitido para estado_aprobado
+                Swal.fire({
+                    title: 'Maximo Crédito permitido',
+                    text: 'No puedes tener más de 2 créditos en curso a la vez',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#dc3545', // Color rojo
+                    timer: 15000,
+                });
+                // Rompe la ejecución de la función aquí
+                return;
+            }
+
+            if (estado_enproceso >= 1) {
+                // Muestra el mensaje de intento máximo permitido para estado_enproceso
+                Swal.fire({
+                    title: 'Máximo Crédito permitido',
+                    text: 'Ya tiene un crédito en proceso',
+                    icon: 'info', // Cambiado a icono de información
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#dc3545', // Color rojo
+                    timer: 15000,
+                });
+
+                // Rompe la ejecución de la función aquí
+                return;
+            }
+        } catch (error) {
+            // Maneja el error si es necesario
+
+            // Verifica si el error es una respuesta 400 (Bad Request)
+            if (axios.isAxiosError(error)) {
+                // Muestra el mensaje de intento máximo permitido
+                Swal.fire({
+                    title: 'Maximo Crédito permitido',
+                    text: 'No puedes tener más de 2 créditos a la vez',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#dc3545', // Color rojo
+                    timer: 15000,
+                });
+                // Rompe la ejecución de la función aquí
+                return;
+            } else {
+                // Si el error no es una respuesta 400, maneja de alguna otra manera si es necesario
+                // ...
+            }
+        } finally {
+            // Este bloque se ejecutará independientemente de si hubo un error o no
+            setLoading(false); // Actualiza el estado de carga en tu componente
+        }
+
+        // Acomodar info que se guarda en el localstoreg
         const numeroDeCuotas = periodicidad === 'quincenal' ? inputEnd2 * 2 : inputEnd2;
 
         // acomodar el cuerpo del
@@ -273,8 +352,6 @@ const DateRangePicker = () => {
             valorCuota: cuota,
             primerPago: format(fechaPago, 'yyyy-MM-dd'),
             tasa: tasa,
-
-            // Agrega más campos según sea necesario
         };
 
         // Verifica si el monto del préstamo es menor que $200,000
@@ -414,12 +491,10 @@ const DateRangePicker = () => {
                                                 type="text"
                                                 className="form-input w-3/4"
                                                 style={{ marginLeft: '4px' }}
-                                                value={`$ ${!isNaN(inputEnd) ? inputEnd.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '0'}`}
+                                                value={`$ ${inputEnd > 0 ? inputEnd.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '0'}`}
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                     const inputValue = parseInt(e.target.value.replace(/\D/g, ''), 10);
-                                                    if (!isNaN(inputValue)) {
-                                                        setInputEnd(inputValue);
-                                                    }
+                                                    setInputEnd(isNaN(inputValue) ? 0 : inputValue);
                                                 }}
                                                 onBlur={() => {
                                                     setInputEnd((prevValue: number) => Math.min(maximo, Math.max(minimo, prevValue)));

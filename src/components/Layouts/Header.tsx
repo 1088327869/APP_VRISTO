@@ -527,15 +527,15 @@ const Header = () => {
                                         </Link>
                                     </li> */}
                                     <li>
-                                        <Link to="/" className="dark:hover:text-white">
+                                        <Link to="/recup/new/password" className="dark:hover:text-white">
                                             <IconLockDots className="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 shrink-0" />
                                             Cambiar cotraseña
                                         </Link>
                                     </li>
                                     <li className="border-t border-white-light dark:border-white-light/10">
-                                        <Link to="/" onClick={handleLogout} className="text-danger !py-3">
+                                        <Link to="/recup/new/password" onClick={handleLogout} className="text-danger !py-3">
                                             <IconLogout className="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 rotate-90 shrink-0" />
-                                            Desconectar
+                                            cerrar sesión
                                         </Link>
                                     </li>
                                 </ul>
