@@ -339,7 +339,7 @@ const MediosDePago = () => {
                                                                 handleCreditOptionChange(selectedIndex);
                                                             }}
                                                         >
-                                                            <option value="">Seleccione un crédito</option>
+                                                            {/* <option value="">Seleccione un crédito</option> */}
                                                             {creditos.map((credito: CreditoConAmortizacion, index: number) => {
                                                                 // Add a condition to check if the credit is in a valid state
                                                                 const isValidState = credito.estado === 'EN PROCESO' || credito.estado === 'APROBADO' || credito.estado === '';
