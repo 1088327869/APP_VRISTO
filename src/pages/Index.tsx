@@ -109,48 +109,49 @@ const Index = () => {
 
     dispatch(setPageTitle('SOLUCREDITO'));
 
+    if (!storedUsdDate) {
+        console.log('Los datos del usuario no están disponibles. Redirigiendo...');
+
+        return; // Interrumpe la ejecución del código restante
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 // Marcamos el inicio del área de loading
                 setLoading(true);
 
-                const response = await axios.post(`${apiURL}/api/menu/index`, {
+                const informacionPersonal = await axios.post(`${apiURL}/api/menu/index`, {
                     userDocumento: userDocumento,
                 });
 
-                const response2 = await axios.post(`${apiURL}/api/menu/enEstudio`, {
+                const estudiosCredito = await axios.post(`${apiURL}/api/menu/enEstudio`, {
                     userDocumento: userDocumento,
                 });
 
-                const response3 = await axios.post(`${apiURL}/api/menu/cupoTotal`, {
+                const cupoCredito = await axios.post(`${apiURL}/api/menu/cupoTotal`, {
                     userDocumento: userDocumento,
                 });
 
-                const response4 = await axios.post(`${apiURL}/api/img/reg`, {
+                const imagenesPersonal = await axios.post(`${apiURL}/api/img/reg`, {
                     userDocumento: userDocumento,
                 });
 
-                // const amortizador = await axios.post(`${apiURL}/api/credit/amorti`, {
-                //     userDocumento: userDocumento,
-                // });
-
-                // console.log('amortizador', amortizador);
                 // Filtrar el tipo "foto"
-                const fotoPerfilData = response4.data.find((item: any) => item.tipo === 'foto');
+                const fotoPerfilData = imagenesPersonal.data.find((item: any) => item.tipo === 'foto');
 
                 // console.log('Datos de la API us: ', response4.data);
 
                 // Accede a los datos después de la respuesta exitosa
-                const nombre_registro = response.data.nombre;
-                const apellido_registro = response.data.apellido;
-                const documento_registrado = response.data.documento;
-                const celular_egistrado = response.data.celular;
-                const email_registrado = response.data.email;
-                const ciudad_registro = response.data.ciudad;
-                const estudio_registro = response2.data.estado;
-                const Cupo_registrado = response3.data.cupo;
-                const CupoDisponible_registrado = response3.data.cupoDisponible;
+                const nombre_registro = informacionPersonal.data.nombre;
+                const apellido_registro = informacionPersonal.data.apellido;
+                const documento_registrado = informacionPersonal.data.documento;
+                const celular_egistrado = informacionPersonal.data.celular;
+                const email_registrado = informacionPersonal.data.email;
+                const ciudad_registro = informacionPersonal.data.ciudad;
+                const estudio_registro = estudiosCredito.data.estado;
+                const Cupo_registrado = cupoCredito.data.cupo;
+                const CupoDisponible_registrado = cupoCredito.data.cupoDisponible;
 
                 // console.log('cupo', response3.data.cupoDisponible);
 
@@ -205,7 +206,22 @@ const Index = () => {
                 });
 
                 const dataRespuestaAPICreditos = respuestaAPICreditos.data;
-                // console.log('respuesta API', dataRespuestaAPICreditos);
+
+                if (respuestaAPICreditos.status === 200) {
+                    console.log('Datos de la API obtenidos exitosamente.');
+
+                    const actualizarCupo = await axios.post(`${apiURL}/api/pagos/aumento/cupo`, {
+                        documento: userDocumento,
+                    });
+
+                    // Verificar si hay créditos
+                    if (dataRespuestaAPICreditos && dataRespuestaAPICreditos.length > 0) {
+                        console.log('Tenemos créditos:', dataRespuestaAPICreditos);
+                    } else {
+                        console.log('No se tienen créditos.');
+                    }
+                }
+
                 // Actualiza formData2 con los datos de la API
                 setCreditos(dataRespuestaAPICreditos);
 

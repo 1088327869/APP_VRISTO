@@ -85,6 +85,11 @@ const DateRangePicker = () => {
     const userDocumento = storedUsdDate ? JSON.parse(storedUsdDate) : {};
     dispatch(setPageTitle('Crédito'));
 
+    if (!storedUsdDate) {
+        console.log('Los datos del usuario no están disponibles. Redirigiendo...');
+
+        return; // Interrumpe la ejecución del código restante
+    }
     // generar alerta exitosa
     const showAlert = async (type: number) => {
         if (type === 15) {

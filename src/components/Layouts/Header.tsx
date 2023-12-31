@@ -66,7 +66,11 @@ const Header = () => {
         const storedUsdDate = localStorage.getItem('userData');
         const userDocumento = storedUsdDate ? JSON.parse(storedUsdDate) : {};
 
-        // console.log('Documento', userDocumento);
+        if (!storedUsdDate) {
+            console.log('Los datos del usuario no están disponibles. Redirigiendo...');
+
+            return; // Interrumpe la ejecución del código restante
+        }
 
         const apiURL = getApiUrl();
 
@@ -533,7 +537,7 @@ const Header = () => {
                                         </Link>
                                     </li>
                                     <li className="border-t border-white-light dark:border-white-light/10">
-                                        <Link to="/recup/new/password" onClick={handleLogout} className="text-danger !py-3">
+                                        <Link to="/" onClick={handleLogout} className="text-danger !py-3">
                                             <IconLogout className="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 rotate-90 shrink-0" />
                                             cerrar sesión
                                         </Link>

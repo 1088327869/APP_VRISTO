@@ -84,6 +84,13 @@ const Sidebar = () => {
         const storedUsdDate = localStorage.getItem('userData');
         const userDocumento = storedUsdDate ? JSON.parse(storedUsdDate) : {};
 
+        // Validar si storedUsdDate existe y no está vacío
+        if (!storedUsdDate) {
+            console.log('Los datos del usuario no están disponibles. Redirigiendo...');
+
+            return; // Interrumpe la ejecución del código restante
+        }
+
         const fetchData = async () => {
             try {
                 const response2 = await axios.post(`${apiURL}/api/menu/enEstudio`, {

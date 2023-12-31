@@ -14,6 +14,9 @@ import '../../assets/css/app.css'; //  css de login
 import AnimateHeight from 'react-animate-height';
 import IconCreditCard from '../../components/Icon/IconCreditCard';
 import Swal from 'sweetalert2';
+import { PAYVALIDA_API } from '../../../config';
+
+const URL_API_PAYVALIDA = PAYVALIDA_API;
 
 interface CreditoConAmortizacion {
     prestamo_ID: number;
@@ -235,7 +238,7 @@ const MediosDePago = () => {
 
             console.log('valor obtenido', valorAPagar);
             const hoy = new Date();
-            const responseLink = await axios.post(`https://pago.solucredito.com.co/generarLink`, {
+            const responseLink = await axios.post(`${URL_API_PAYVALIDA}/generarLink`, {
                 // const responseLink = await axios.post(`http://localhost:3001/generarLink`, {
                 nombreCliente: formData.nombre,
                 email: formData.email,
@@ -338,14 +341,16 @@ const MediosDePago = () => {
                                                                 }));
                                                                 handleCreditOptionChange(selectedIndex);
                                                             }}
+                                                            value="" // Establecer el valor seleccionado aquí
                                                         >
-                                                            {/* <option value="">Seleccione un crédito</option> */}
+                                                            <option value="" disabled>
+                                                                Seleccione un crédito
+                                                            </option>
                                                             {creditos.map((credito: CreditoConAmortizacion, index: number) => {
-                                                                // Add a condition to check if the credit is in a valid state
                                                                 const isValidState = credito.estado === 'EN PROCESO' || credito.estado === 'APROBADO' || credito.estado === '';
 
                                                                 if (!isValidState) {
-                                                                    return null; // Skip rendering this credit option if it's not in a valid state
+                                                                    return null;
                                                                 }
 
                                                                 return (
