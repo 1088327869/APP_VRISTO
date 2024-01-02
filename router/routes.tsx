@@ -70,6 +70,7 @@ const Export = lazy(() => import('../pages/DataTables/Export'));
 const ColumnChooser = lazy(() => import('../pages/DataTables/ColumnChooser'));
 const Profile = lazy(() => import('../pages/Users/Profile'));
 const AccountSetting = lazy(() => import('../pages/Users/AccountSetting'));
+const EstudiosCredito = lazy(() => import('../pages/Users/estudioCredito'));
 const KnowledgeBase = lazy(() => import('../pages/Pages/KnowledgeBase'));
 const ContactUsBoxed = lazy(() => import('../pages/Pages/ContactUsBoxed'));
 const ContactUsCover = lazy(() => import('../pages/Pages/ContactUsCover'));
@@ -109,7 +110,7 @@ const FormularioActualizar = lazy(() => import('../pages/Forms/RegistroActualiza
 const QuillEditor = lazy(() => import('../pages/Forms/QuillEditor'));
 const MarkDownEditor = lazy(() => import('../pages/Forms/MarkDownEditor'));
 
-const SolicitarCredito = lazy(() => import('../pages/Forms/solicitarCredito'));
+// const SolicitarCredito = lazy(() => import('../pages/Forms/solicitarCredito'));
 const ConfirmarDesembolso = lazy(() => import('../pages/Forms/ConfirmarDesembolso'));
 
 const Clipboard = lazy(() => import('../pages/Forms/Clipboard'));
@@ -119,492 +120,497 @@ const Clipboard = lazy(() => import('../pages/Forms/Clipboard'));
 // const app = require('./backend/app.js');
 
 const routes = [
-    // dashboard
-    {
-        path: '/',
-        element: <Index />,
-    },
-    // {
-    //     path: '/index',
-    //     element: <Index />,
-    // },
-    // analytics page
-    {
-        path: '/formu',
-        element: <Formulario />,
-    },
-    {
-        path: '/panel',
-        element: <Panel />,
-    },
-    {
-        path: '/Registro/completado/procesado',
-        element: <Finalizar />,
-    },
-    {
-        path: '/analytics',
-        element: <Analytics />,
-    },
-    // finance page
-    {
-        path: '/finance',
-        element: <Finance />,
-    },
-    // crypto page
-    {
-        path: '/crypto',
-        element: <Crypto />,
-    },
-    {
-        path: '/apps/pay',
-        element: <Payvalida />,
-    },
-    {
-        path: '/apps/notes',
-        element: <Notes />,
-    },
-    {
-        path: '/apps/contacts',
-        element: <Contacts />,
-    },
-    {
-        path: '/apps/mailbox',
-        element: <Mailbox />,
-    },
-    {
-        path: '/apps/invoice/list',
-        element: <List />,
-    },
-    // Apps page
-    {
-        path: '',
-        element: <Chat />,
-    },
-    {
-        path: '/apps/scrumboard',
-        element: <Scrumboard />,
-    },
-    {
-        path: '/apps/calendar',
-        element: <Calendar />,
-    },
-    // preview page
-    {
-        path: '/apps/invoice/preview',
-        element: <Preview />,
-    },
-    {
-        path: '/apps/invoice/add',
-        element: <Add />,
-    },
-    {
-        path: '/apps/invoice/edit',
-        element: <Edit />,
-    },
-    // components page
-    {
-        path: '/components/tabs',
-        element: <Tabs />,
-    },
-    {
-        path: '/components/accordions',
-        element: <Accordians />,
-    },
-    {
-        path: '/components/modals',
-        element: <Modals />,
-    },
-    {
-        path: '/components/cards',
-        element: <Cards />,
-    },
-    {
-        path: '/components/carousel',
-        element: <Carousel />,
-    },
-    {
-        path: '/components/countdown',
-        element: <Countdown />,
-    },
-    {
-        path: '/components/counter',
-        element: <Counter />,
-    },
-    {
-        path: '/components/sweetalert',
-        element: <SweetAlert />,
-    },
-    {
-        path: '/components/timeline',
-        element: <Timeline />,
-    },
-    {
-        path: '/components/notifications',
-        element: <Notification />,
-    },
-    {
-        path: '/components/media-object',
-        element: <MediaObject />,
-    },
-    {
-        path: '/components/list-group',
-        element: <ListGroup />,
-    },
-    {
-        path: '/components/pricing-table',
-        element: <PricingTable />,
-    },
-    {
-        path: '/components/lightbox',
-        element: <LightBox />,
-    },
-    // elements page
-    {
-        path: '/elements/alerts',
-        element: <Alerts />,
-    },
-    {
-        path: '/elements/avatar',
-        element: <Avatar />,
-    },
-    {
-        path: '/elements/badges',
-        element: <Badges />,
-    },
-    {
-        path: '/elements/breadcrumbs',
-        element: <Breadcrumbs />,
-    },
-    {
-        path: '/elements/buttons',
-        element: <Buttons />,
-    },
-    {
-        path: '/elements/buttons-group',
-        element: <Buttongroups />,
-    },
-    {
-        path: '/elements/color-library',
-        element: <Colorlibrary />,
-    },
-    {
-        path: '/elements/dropdown',
-        element: <DropdownPage />,
-    },
-    {
-        path: '/elements/infobox',
-        element: <Infobox />,
-    },
-    {
-        path: '/elements/jumbotron',
-        element: <Jumbotron />,
-    },
-    {
-        path: '/elements/loader',
-        element: <Loader />,
-    },
-    {
-        path: '/elements/pagination',
-        element: <Pagination />,
-    },
-    {
-        path: '/elements/popovers',
-        element: <Popovers />,
-    },
-    {
-        path: '/elements/progress-bar',
-        element: <Progressbar />,
-    },
-    {
-        path: '/elements/search',
-        element: <Search />,
-    },
-    {
-        path: '/elements/tooltips',
-        element: <Tooltip />,
-    },
-    {
-        path: '/elements/treeview',
-        element: <Treeview />,
-    },
-    {
-        path: '/elements/typography',
-        element: <Typography />,
-    },
+  // dashboard
+  {
+    path: '/',
+    element: <Index />,
+  },
+  // {
+  //     path: '/index',
+  //     element: <Index />,
+  // },
+  // analytics page
+  {
+    path: '/formu',
+    element: <Formulario />,
+  },
+  {
+    path: '/panel',
+    element: <Panel />,
+  },
+  {
+    path: '/Registro/completado/procesado',
+    element: <Finalizar />,
+  },
+  {
+    path: '/analytics',
+    element: <Analytics />,
+  },
+  // finance page
+  {
+    path: '/finance',
+    element: <Finance />,
+  },
+  // crypto page
+  {
+    path: '/crypto',
+    element: <Crypto />,
+  },
+  {
+    path: '/apps/pay',
+    element: <Payvalida />,
+  },
+  {
+    path: '/apps/notes',
+    element: <Notes />,
+  },
+  {
+    path: '/apps/contacts',
+    element: <Contacts />,
+  },
+  {
+    path: '/apps/mailbox',
+    element: <Mailbox />,
+  },
+  {
+    path: '/apps/invoice/list',
+    element: <List />,
+  },
+  // Apps page
+  {
+    path: '',
+    element: <Chat />,
+  },
+  {
+    path: '/apps/scrumboard',
+    element: <Scrumboard />,
+  },
+  {
+    path: '/apps/calendar',
+    element: <Calendar />,
+  },
+  // preview page
+  {
+    path: '/apps/invoice/preview',
+    element: <Preview />,
+  },
+  {
+    path: '/apps/invoice/add',
+    element: <Add />,
+  },
+  {
+    path: '/apps/invoice/edit',
+    element: <Edit />,
+  },
+  // components page
+  {
+    path: '/components/tabs',
+    element: <Tabs />,
+  },
+  {
+    path: '/components/accordions',
+    element: <Accordians />,
+  },
+  {
+    path: '/components/modals',
+    element: <Modals />,
+  },
+  {
+    path: '/components/cards',
+    element: <Cards />,
+  },
+  {
+    path: '/components/carousel',
+    element: <Carousel />,
+  },
+  {
+    path: '/components/countdown',
+    element: <Countdown />,
+  },
+  {
+    path: '/components/counter',
+    element: <Counter />,
+  },
+  {
+    path: '/components/sweetalert',
+    element: <SweetAlert />,
+  },
+  {
+    path: '/components/timeline',
+    element: <Timeline />,
+  },
+  {
+    path: '/components/notifications',
+    element: <Notification />,
+  },
+  {
+    path: '/components/media-object',
+    element: <MediaObject />,
+  },
+  {
+    path: '/components/list-group',
+    element: <ListGroup />,
+  },
+  {
+    path: '/components/pricing-table',
+    element: <PricingTable />,
+  },
+  {
+    path: '/components/lightbox',
+    element: <LightBox />,
+  },
+  // elements page
+  {
+    path: '/elements/alerts',
+    element: <Alerts />,
+  },
+  {
+    path: '/elements/avatar',
+    element: <Avatar />,
+  },
+  {
+    path: '/elements/badges',
+    element: <Badges />,
+  },
+  {
+    path: '/elements/breadcrumbs',
+    element: <Breadcrumbs />,
+  },
+  {
+    path: '/elements/buttons',
+    element: <Buttons />,
+  },
+  {
+    path: '/elements/buttons-group',
+    element: <Buttongroups />,
+  },
+  {
+    path: '/elements/color-library',
+    element: <Colorlibrary />,
+  },
+  {
+    path: '/elements/dropdown',
+    element: <DropdownPage />,
+  },
+  {
+    path: '/elements/infobox',
+    element: <Infobox />,
+  },
+  {
+    path: '/elements/jumbotron',
+    element: <Jumbotron />,
+  },
+  {
+    path: '/elements/loader',
+    element: <Loader />,
+  },
+  {
+    path: '/elements/pagination',
+    element: <Pagination />,
+  },
+  {
+    path: '/elements/popovers',
+    element: <Popovers />,
+  },
+  {
+    path: '/elements/progress-bar',
+    element: <Progressbar />,
+  },
+  {
+    path: '/elements/search',
+    element: <Search />,
+  },
+  {
+    path: '/elements/tooltips',
+    element: <Tooltip />,
+  },
+  {
+    path: '/elements/treeview',
+    element: <Treeview />,
+  },
+  {
+    path: '/elements/typography',
+    element: <Typography />,
+  },
 
-    // charts page
-    {
-        path: '/charts',
-        element: <Charts />,
-    },
-    // widgets page
-    {
-        path: '/widgets',
-        element: <Widgets />,
-    },
-    //  font-icons page
-    {
-        path: '/font-icons',
-        element: <FontIcons />,
-    },
-    //  Drag And Drop page
-    {
-        path: '/dragndrop',
-        element: <DragAndDrop />,
-    },
-    //  Tables page
-    {
-        path: '/tables',
-        element: <Tables />,
-    },
-    // Data Tables
-    {
-        path: '/datatables/basic',
-        element: <Basic />,
-    },
-    {
-        path: '/datatables/advanced',
-        element: <Advanced />,
-    },
-    {
-        path: '/datatables/skin',
-        element: <Skin />,
-    },
-    {
-        path: '/datatables/order-sorting',
-        element: <OrderSorting />,
-    },
-    {
-        path: '/datatables/multi-column',
-        element: <MultiColumn />,
-    },
-    {
-        path: '/datatables/multiple-tables',
-        element: <MultipleTables />,
-    },
-    {
-        path: '/datatables/alt-pagination',
-        element: <AltPagination />,
-    },
-    {
-        path: '/datatables/checkbox',
-        element: <Checkbox />,
-    },
-    {
-        path: '/datatables/range-search',
-        element: <RangeSearch />,
-    },
-    {
-        path: '/datatables/export',
-        element: <Export />,
-    },
-    {
-        path: '/datatables/column-chooser',
-        element: <ColumnChooser />,
-    },
-    // Users page
-    {
-        path: '/users/profile',
-        element: <Profile />,
-    },
-    {
-        path: '/users/user-account-settings',
-        element: <AccountSetting />,
-    },
-    // pages
-    {
-        path: '/pages/knowledge-base',
-        element: <KnowledgeBase />,
-    },
-    {
-        path: '/pages/contact-us-boxed',
-        element: <ContactUsBoxed />,
-        layout: 'blank',
-    },
-    {
-        path: '/pages/contact-us-cover',
-        element: <ContactUsCover />,
-        layout: 'blank',
-    },
-    {
-        path: '/pages/faq',
-        element: <Faq />,
-    },
-    {
-        path: '/pages/coming-soon-boxed',
-        element: <ComingSoonBoxed />,
-        layout: 'blank',
-    },
-    {
-        path: '/pages/coming-soon-cover',
-        element: <ComingSoonCover />,
-        layout: 'blank',
-    },
-    {
-        path: '/pages/error404',
-        element: <ERROR404 />,
-        layout: 'blank',
-    },
-    {
-        path: '/pages/error500',
-        element: <ERROR500 />,
-        layout: 'blank',
-    },
-    {
-        path: '/pages/error503',
-        element: <ERROR503 />,
-        layout: 'blank',
-    },
-    {
-        path: '/pages/maintenence',
-        element: <Maintenence />,
-        layout: 'blank',
-    },
-    //Authentication
-    {
-        path: '/auth/boxed-signin',
-        element: <LoginBoxed />,
-        layout: 'blank',
-    },
+  // charts page
+  {
+    path: '/charts',
+    element: <Charts />,
+  },
+  // widgets page
+  {
+    path: '/widgets',
+    element: <Widgets />,
+  },
+  //  font-icons page
+  {
+    path: '/font-icons',
+    element: <FontIcons />,
+  },
+  //  Drag And Drop page
+  {
+    path: '/dragndrop',
+    element: <DragAndDrop />,
+  },
+  //  Tables page
+  {
+    path: '/tables',
+    element: <Tables />,
+  },
+  // Data Tables
+  {
+    path: '/datatables/basic',
+    element: <Basic />,
+  },
+  {
+    path: '/datatables/advanced',
+    element: <Advanced />,
+  },
+  {
+    path: '/datatables/skin',
+    element: <Skin />,
+  },
+  {
+    path: '/datatables/order-sorting',
+    element: <OrderSorting />,
+  },
+  {
+    path: '/datatables/multi-column',
+    element: <MultiColumn />,
+  },
+  {
+    path: '/datatables/multiple-tables',
+    element: <MultipleTables />,
+  },
+  {
+    path: '/datatables/alt-pagination',
+    element: <AltPagination />,
+  },
+  {
+    path: '/datatables/checkbox',
+    element: <Checkbox />,
+  },
+  {
+    path: '/datatables/range-search',
+    element: <RangeSearch />,
+  },
+  {
+    path: '/datatables/export',
+    element: <Export />,
+  },
+  {
+    path: '/datatables/column-chooser',
+    element: <ColumnChooser />,
+  },
+  // Users page
+  {
+    path: '/users/profile',
+    element: <Profile />,
+  },
+  {
+    path: '/users/user-account-settings',
+    element: <AccountSetting />,
+  },
 
-    // {
-    //     path: '/login/password',
-    //     element: ,
-    //     layout: 'blank',
-    // },
-    {
-        path: '/recup/new/password',
-        element: <RecuperarContrasena />,
-        layout: 'blank',
-    },
-    {
-        path: '/new/password',
-        element: <NuevaContrasena />,
-        layout: 'blank',
-    },
-    {
-        path: '/auth/boxed-signup',
-        element: <RegisterBoxed />,
-        layout: 'blank',
-    },
-    //  registro de  confirmacion de mensaje de texto
-    {
-        path: '/msm',
-        element: <ConfirmarMsm />,
-        layout: 'blank',
-    },
-    {
-        path: '/auth/boxed-lockscreen',
-        element: <UnlockBoxed />,
-        layout: 'blank',
-    },
-    {
-        path: '/login/recuperar',
-        element: <RecoverIdBoxed />,
-        layout: 'blank',
-    },
-    {
-        path: '/auth/cover-login',
-        element: <LoginCover />,
-        layout: 'blank',
-    },
-    //Registro  usuario
-    {
-        path: '/auth/register',
-        element: <RegisterCover />,
-        layout: 'blank',
-    },
-    {
-        path: '/auth/cover-lockscreen',
-        element: <UnlockCover />,
-        layout: 'blank',
-    },
-    {
-        path: '/auth/cover-password-reset',
-        element: <RecoverIdCover />,
-        layout: 'blank',
-    },
-    //forms page
-    {
-        path: '/forms/basic',
-        element: <FormBasic />,
-    },
-    {
-        path: '/forms/input-group',
-        element: <FormInputGroup />,
-    },
-    {
-        path: '/forms/layouts',
-        element: <FormLayouts />,
-    },
-    {
-        path: '/forms/validation',
-        element: <Validation />,
-    },
-    {
-        path: '/forms/input-mask',
-        element: <InputMask />,
-    },
-    {
-        path: '/forms/select2',
-        element: <Select2 />,
-    },
-    {
-        path: '/forms/touchspin',
-        element: <Touchspin />,
-    },
-    {
-        path: '/forms/checkbox-radio',
-        element: <CheckBoxRadio />,
-    },
-    {
-        path: '/forms/switches',
-        element: <Switches />,
-    },
-    {
-        path: '/forms/wizards',
-        element: <Wizards />,
-    },
+  {
+    path: '/users/estudio',
+    element: <EstudiosCredito />,
+  },
+  // pages
+  {
+    path: '/pages/knowledge-base',
+    element: <KnowledgeBase />,
+  },
+  {
+    path: '/pages/contact-us-boxed',
+    element: <ContactUsBoxed />,
+    layout: 'blank',
+  },
+  {
+    path: '/pages/contact-us-cover',
+    element: <ContactUsCover />,
+    layout: 'blank',
+  },
+  {
+    path: '/pages/faq',
+    element: <Faq />,
+  },
+  {
+    path: '/pages/coming-soon-boxed',
+    element: <ComingSoonBoxed />,
+    layout: 'blank',
+  },
+  {
+    path: '/pages/coming-soon-cover',
+    element: <ComingSoonCover />,
+    layout: 'blank',
+  },
+  {
+    path: '/pages/error404',
+    element: <ERROR404 />,
+    layout: 'blank',
+  },
+  {
+    path: '/pages/error500',
+    element: <ERROR500 />,
+    layout: 'blank',
+  },
+  {
+    path: '/pages/error503',
+    element: <ERROR503 />,
+    layout: 'blank',
+  },
+  {
+    path: '/pages/maintenence',
+    element: <Maintenence />,
+    layout: 'blank',
+  },
+  //Authentication
+  {
+    path: '/auth/boxed-signin',
+    element: <LoginBoxed />,
+    layout: 'blank',
+  },
 
-    {
-        path: '/forms/wizards/actualizar',
-        element: <FormularioActualizar />,
-    },
-    // {
-    //     path: '/forms/file-upload',
-    //     element: <FileUploadPreview />,
-    // },
-    {
-        path: '/forms/quill-editor',
-        element: <QuillEditor />,
-    },
-    {
-        path: '/forms/markdown-editor',
-        element: <MarkDownEditor />,
-    },
-    {
-        path: '/forms/Credit',
-        element: <SolicitarCredito />,
-    },
-    {
-        path: '/forms/Credit/Confirmar',
-        element: <ConfirmarDesembolso />,
-    },
+  // {
+  //     path: '/login/password',
+  //     element: ,
+  //     layout: 'blank',
+  // },
+  {
+    path: '/recup/new/password',
+    element: <RecuperarContrasena />,
+    layout: 'blank',
+  },
+  {
+    path: '/new/password',
+    element: <NuevaContrasena />,
+    layout: 'blank',
+  },
+  {
+    path: '/auth/boxed-signup',
+    element: <RegisterBoxed />,
+    layout: 'blank',
+  },
+  //  registro de  confirmacion de mensaje de texto
+  {
+    path: '/msm',
+    element: <ConfirmarMsm />,
+    layout: 'blank',
+  },
+  {
+    path: '/auth/boxed-lockscreen',
+    element: <UnlockBoxed />,
+    layout: 'blank',
+  },
+  {
+    path: '/login/recuperar',
+    element: <RecoverIdBoxed />,
+    layout: 'blank',
+  },
+  {
+    path: '/auth/cover-login',
+    element: <LoginCover />,
+    layout: 'blank',
+  },
+  //Registro  usuario
+  {
+    path: '/auth/register',
+    element: <RegisterCover />,
+    layout: 'blank',
+  },
+  {
+    path: '/auth/cover-lockscreen',
+    element: <UnlockCover />,
+    layout: 'blank',
+  },
+  {
+    path: '/auth/cover-password-reset',
+    element: <RecoverIdCover />,
+    layout: 'blank',
+  },
+  //forms page
+  {
+    path: '/forms/basic',
+    element: <FormBasic />,
+  },
+  {
+    path: '/forms/input-group',
+    element: <FormInputGroup />,
+  },
+  {
+    path: '/forms/layouts',
+    element: <FormLayouts />,
+  },
+  {
+    path: '/forms/validation',
+    element: <Validation />,
+  },
+  {
+    path: '/forms/input-mask',
+    element: <InputMask />,
+  },
+  {
+    path: '/forms/select2',
+    element: <Select2 />,
+  },
+  {
+    path: '/forms/touchspin',
+    element: <Touchspin />,
+  },
+  {
+    path: '/forms/checkbox-radio',
+    element: <CheckBoxRadio />,
+  },
+  {
+    path: '/forms/switches',
+    element: <Switches />,
+  },
+  {
+    path: '/forms/wizards',
+    element: <Wizards />,
+  },
 
-    {
-        path: '/forms/clipboard',
-        element: <Clipboard />,
-    },
-    {
-        path: '/about',
-        element: <About />,
-        layout: 'blank',
-    },
-    {
-        path: '*',
-        element: <Error />,
-        layout: 'blank',
-    },
+  {
+    path: '/forms/wizards/actualizar',
+    element: <FormularioActualizar />,
+  },
+  // {
+  //     path: '/forms/file-upload',
+  //     element: <FileUploadPreview />,
+  // },
+  {
+    path: '/forms/quill-editor',
+    element: <QuillEditor />,
+  },
+  {
+    path: '/forms/markdown-editor',
+    element: <MarkDownEditor />,
+  },
+  //   {
+  //     path: '/forms/Credit',
+  //     element: <SolicitarCredito />,
+  //   },
+  {
+    path: '/forms/Credit/Confirmar',
+    element: <ConfirmarDesembolso />,
+  },
+
+  {
+    path: '/forms/clipboard',
+    element: <Clipboard />,
+  },
+  {
+    path: '/about',
+    element: <About />,
+    layout: 'blank',
+  },
+  {
+    path: '*',
+    element: <Error />,
+    layout: 'blank',
+  },
 ];
 
 export { routes };
