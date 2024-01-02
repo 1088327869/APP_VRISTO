@@ -109,14 +109,14 @@ const Index = () => {
 
     dispatch(setPageTitle('SOLUCREDITO'));
 
-    if (!storedUsdDate) {
-        console.log('Los datos del usuario no están disponibles. Redirigiendo...');
-
-        return; // Interrumpe la ejecución del código restante
-    }
-
     useEffect(() => {
         const fetchData = async () => {
+            if (!storedUsdDate) {
+                console.log('Los datos del usuario no están disponibles. Redirigiendo...');
+
+                return; // Interrumpe la ejecución del código restante
+            }
+
             try {
                 // Marcamos el inicio del área de loading
                 setLoading(true);

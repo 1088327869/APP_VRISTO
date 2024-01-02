@@ -189,7 +189,7 @@ const RegisterCover = () => {
                                             placeholder="Ingresa tu teléfono"
                                             className="form-input ps-10 placeholder:text-white-dark"
                                             onChange={handleChange}
-                                            pattern="[0-9]*" // Solo permite dígitos
+                                            pattern="[0-9]*" // Solo permite dígitos.
                                             minLength={10}
                                             maxLength={10}
                                             required

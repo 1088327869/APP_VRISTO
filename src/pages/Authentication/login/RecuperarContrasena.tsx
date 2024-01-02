@@ -13,6 +13,7 @@ import IconGoogle from '../../../components/Icon/IconGoogle';
 import IconPencil from '../../../components/Icon/IconPencil';
 import Swal from 'sweetalert2';
 import GridLoader from 'react-spinners/GridLoader';
+import IconPhoneCall from '../../../components/Icon/IconPhoneCall';
 // import '../../../assets/css/app.css';
 
 const apiURL = getApiUrl();
@@ -177,7 +178,7 @@ const recuper2 = () => {
                                             value={formData.telefono}
                                         />
                                         <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                            <IconLockDots fill={true} />
+                                            <IconPhoneCall fill={true} />
                                         </span>
                                     </div>
                                 </div>
